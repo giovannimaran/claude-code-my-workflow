@@ -1,12 +1,7 @@
 # CLAUDE.MD -- Academic Project Development with Claude Code
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
+**Project:** Firm-Level Export Diversification and Capability Reconfiguration
+**Institution:** University of Trento
 **Branch:** main
 
 ---
@@ -15,7 +10,7 @@
 
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
 - **Verify after** -- compile/render and confirm output at the end of every task
-- **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
+- **Single source of truth** -- paper LaTeX is authoritative; slides are presentation derivatives
 - **Quality gates** -- nothing ships below 80/100
 - **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to [MEMORY.md](MEMORY.md)
 
@@ -23,23 +18,39 @@ Cross-session context lives in [MEMORY.md](MEMORY.md); past plans, specs, and se
 
 ---
 
+## Tool Stack
+
+| Tool | Role |
+|------|------|
+| Python | Primary: data cleaning, network construction, RCA, community detection, figures |
+| Stata | Econometric analysis: FE regressions, robustness tables, DiD / event-study |
+| R | Occasional: specific packages, alternative robustness, publication-quality figures |
+| LaTeX | Manuscript (`paper/`) and presentations (`Slides/`) |
+
+---
+
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
-├── CLAUDE.MD                    # This file
+my-project/
+├── CLAUDE.md
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
+├── Figures/                     # Publication-ready figures
 ├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
-├── Quarto/                      # RevealJS .qmd files + theme
-├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
-├── quality_reports/             # Plans, session logs, merge reports, decision records
+├── Slides/                      # Beamer .tex for presentations
+├── Quarto/                      # RevealJS .qmd derivatives
+├── paper/                       # LaTeX empirical manuscript
+├── data/                        # GITIGNORED: raw/, processed/, intermediate/
+├── scripts/
+│   ├── python/                  # Main pipeline (numbered 00–99)
+│   ├── stata/                   # Econometric regressions, FE, robustness
+│   └── R/                       # Occasional use
 ├── explorations/                # Research sandbox (see rules)
-├── templates/                   # Session log, quality report templates
-└── master_supporting_docs/      # Papers and existing slides
+├── docs/                        # GitHub Pages (auto-generated)
+├── quality_reports/             # Plans, session logs, merge reports
+├── templates/
+└── master_supporting_docs/      # Reference papers and supporting slides
 ```
 
 ---
@@ -47,6 +58,18 @@ Cross-session context lives in [MEMORY.md](MEMORY.md); past plans, specs, and se
 ## Commands
 
 ```bash
+# Python pipeline (from repo root)
+python scripts/python/00_run_all.py
+python scripts/python/01_load.py       # ingest raw microdata
+python scripts/python/02_clean.py      # firm-product-destination panel
+python scripts/python/03_rca.py        # RCA-based product links
+python scripts/python/04_network.py    # firm-product bipartite networks
+python scripts/python/05_community.py  # BRIM community detection
+python scripts/python/06_describe.py   # descriptive stats + figures
+
+# Stata (from repo root)
+stata -b do scripts/stata/99_run_all.do
+
 # LaTeX (3-pass, XeLaTeX only)
 cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
 BIBINPUTS=..:$BIBINPUTS bibtex file
@@ -61,12 +84,7 @@ python scripts/quality_score.py Quarto/file.qmd
 
 # Palette sync (LaTeX ↔ SCSS)
 ./scripts/check-palette-sync.sh
-
-# Surface-count sync (README ↔ CLAUDE.md ↔ guide ↔ landing page)
-./scripts/check-surface-sync.sh
 ```
-
-**Palette contract:** color names in `Preambles/header.tex` must match SCSS variables in `Quarto/theme-template.scss`. See [`Preambles/README.md`](Preambles/README.md).
 
 ---
 
@@ -89,68 +107,47 @@ Enforced by `/commit` (halts + asks for override); not enforced by a git pre-com
 | `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
 | `/deploy [LectureN]` | Render Quarto + sync to docs/ |
 | `/extract-tikz [LectureN]` | TikZ → PDF → SVG |
-| `/new-diagram [snippet] [output.tex]` | Scaffold a TikZ diagram from the gallery with prevention + review |
+| `/new-diagram [snippet] [output.tex]` | Scaffold a TikZ diagram from gallery |
 | `/proofread [file]` | Grammar/typo/overflow review |
 | `/visual-audit [file]` | Slide layout audit |
-| `/pedagogy-review [file]` | Narrative, notation, pacing review |
 | `/review-r [file]` | R code quality review |
-| `/qa-quarto [LectureN]` | Adversarial Quarto vs Beamer QA |
-| `/slide-excellence [file]` | Combined multi-agent review |
-| `/translate-to-quarto [file]` | Beamer → Quarto translation |
 | `/validate-bib` | Cross-reference citations |
-| `/devils-advocate` | Challenge slide design |
-| `/create-lecture` | Full lecture creation |
 | `/commit [msg]` | Stage, commit, PR, merge |
 | `/lit-review [topic]` | Literature search + synthesis |
 | `/research-ideation [topic]` | Research questions + strategies |
 | `/interview-me [topic]` | Interactive research interview |
-| `/review-paper [file]` | Manuscript review (single-pass / `--adversarial` / `--peer <journal>` simulated pipeline) |
+| `/review-paper [file]` | Manuscript review (single-pass / `--adversarial` / `--peer <journal>`) |
 | `/respond-to-referees [report] [manuscript]` | R&R cross-reference + response draft |
-| `/data-analysis [dataset]` | End-to-end R analysis |
-| `/audit-reproducibility [paper]` | Enforce replication tolerance thresholds on paper ↔ code |
-| `/learn [skill-name]` | Extract discovery into persistent skill |
-| `/context-status` | Show session health + context usage |
-| `/deep-audit` | Repository-wide consistency audit |
-| `/permission-check` | Diagnose permission layers when prompts fire unexpectedly |
 | `/seven-pass-review` | Seven-pass adversarial manuscript review (parallel forked subagents) |
 | `/verify-claims [file]` | Chain-of-Verification fact-check (forked verifier, fresh context) |
-| `/checkpoint [topic]` | Save a structured state snapshot (active plan, decisions, file pointers, next actions) before stopping or handing off |
-| `/preregister [--style osf|aspredicted|aea-rct]` | Draft a preregistration document (OSF / AsPredicted / AEA RCT Registry) from a research spec |
-| `/humanize [file]` | Detect AI-voice tells in academic prose (read-only audit; no rewrite) |
-| `/prompt [text] [depth:light|standard|deep]` | Reformat informal input into a structured six-section prompt, then execute |
-| `/prompt-only [text] [depth] [--save path]` | Same formatting as `/prompt`, but emits the prompt as a reusable artifact (no execution) |
-| `/compress-session [slug]` | Distil current session into structured notes before auto-compaction (vs `/checkpoint` for natural stops) |
-| `/promote-memory [filter]` | Five-critic council that votes on which `[LEARN]` entries graduate from personal-memory.md to MEMORY.md |
-| `/stata-replication [paper-or-data]` | End-to-end Stata pipeline scaffold + execution via `stata-mcp` (mirrors `/data-analysis` for R) |
-| `/simulation-study [estimator+DGP]` | Reproducible Monte Carlo study: DGP, estimator grid, seeded reps, bias/RMSE/coverage/size/power + Monte Carlo SEs |
-| `/r-package-check [pkg path]` | R package release gate: `devtools::document()` + tests + `R CMD check --as-cran`, CRAN-policy triage, `r-package-reviewer` pass |
+| `/data-analysis [dataset]` | End-to-end R analysis pipeline |
+| `/stata-replication [paper-or-data]` | End-to-end Stata pipeline scaffold |
+| `/audit-reproducibility [paper]` | Enforce replication tolerance thresholds on paper ↔ code |
+| `/simulation-study [estimator+DGP]` | Reproducible Monte Carlo study |
+| `/preregister [--style osf|aspredicted|aea-rct]` | Draft a preregistration document |
+| `/humanize [file]` | Detect AI-voice tells in academic prose |
+| `/checkpoint [topic]` | Save structured state snapshot |
+| `/compress-session [slug]` | Distil session before auto-compaction |
+| `/context-status` | Show session health + context usage |
+| `/deep-audit` | Repository-wide consistency audit |
+| `/r-package-check [pkg path]` | R package release gate |
+| `/promote-memory [filter]` | Five-critic council on [LEARN] entries |
 
 ---
 
-<!-- CUSTOMIZE: Replace placeholder rows ([your-env], [.your-class]) with your own.
-     Delete the rows marked "(example — delete)" once you've added yours. -->
-
 ## Beamer Custom Environments
 
-| Environment | Effect | Use Case |
-| --- | --- | --- |
-| `[your-env]` | [Description] | [When to use] |
-| `keybox` | Gold background box | Key points *(example — delete)* |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions *(example — delete)* |
+*TBD — update once the presentation theme is finalized.*
 
 ## Quarto CSS Classes
 
-| Class | Effect | Use Case |
-| --- | --- | --- |
-| `[.your-class]` | [Description] | [When to use] |
-| `.smaller` | 85% font | Dense content *(example — delete)* |
-| `.positive` | Green bold | Good annotations *(example — delete)* |
+*TBD — update once the Quarto theme is finalized.*
 
 ---
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
-| --- | --- | --- | --- |
-| HelloWorld *(sample — delete when ready)* | `HelloWorld.tex` | `HelloWorld.qmd` | Minimal deck to verify setup |
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
+| Artifact | Path | Status |
+| --- | --- | --- |
+| Empirical paper | `paper/` | Not started — run `/interview-me` to formalize research spec |
+| Presentation slides | `Slides/` | Reference PDF exists (`Empirical_presentation copia.pdf`) — source .tex TBD |

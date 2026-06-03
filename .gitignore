@@ -76,6 +76,33 @@ quality_reports/preregistrations/*
 # R analysis outputs (generated artifacts; keep scripts, ignore outputs)
 scripts/R/_outputs/
 
+# Python analysis outputs (generated artifacts; keep scripts, ignore outputs)
+scripts/python/_outputs/
+scripts/python/**/__pycache__/
+
+# Stata analysis outputs (generated artifacts; keep scripts, ignore outputs)
+scripts/stata/_outputs/
+
+# Data — large microdata files stay local, never committed.
+# Directory structure is kept via .gitkeep; all content is gitignored.
+data/raw/*
+data/processed/*
+data/intermediate/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/intermediate/.gitkeep
+
+# Large data file types anywhere in the repo
+*.dta
+*.parquet
+*.feather
+
+# Python virtual environments
+.venv/
+venv/
+env/
+*.egg-info/
+
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
