@@ -79,9 +79,11 @@ growth trajectories while low-fitness countries exhibit chaotic dynamics---a pro
 that has direct implications for heterogeneous treatment responses in our setting:
 firms embedded in high-complexity capability clusters should display more systematic
 responses to tariff shocks than firms operating at the periphery of the product
-space. \citet{angelini2017} characterise the asymptotic dynamics of the FC map and
-confirm that the ranking it induces is stable under perturbation, a property we rely
-on when we anchor each firm's home block at baseline and track movement against it.
+space. \citet{angelini2017} characterise the long-run dynamics of products in the complexity
+plane, showing that they drift toward a stationary configuration so that
+shock-induced dislocations are transient and mean-reverting---which is why we treat
+product complexity as a well-defined pre-shock control and read post-shock movements
+against a fixed baseline.
 \citet{stojkoski2025} extend the framework to an optimisation context,
 showing that the ECI-growth relationship is stronger at lower income levels and that
 relatedness is one of several predictors of product-entry, a finding that validates
@@ -96,10 +98,11 @@ capability architecture rather than of performance.
 Three strands sharpen what ``relatedness'' and ``diversification'' actually mean for
 the direction of adjustment. First, the related-variety tradition of
 \citet{frenken2007} distinguishes \emph{related} variety (entry into activities that
-share capabilities, which smooths regional employment and supports productivity
-growth) from \emph{unrelated} variety (which provides a portfolio hedge against
-asymmetric sectoral shocks)---the regional-economics antecedent of our $d_{\rm in}$
-versus $d_{\rm out}$ distinction. \citet{boschma2015} show that the relative payoff to
+share capabilities, which drives regional \emph{employment} growth through
+within-sector Jacobs spillovers---though, tellingly, not productivity growth) from
+\emph{unrelated} variety (which provides a portfolio hedge that lowers unemployment
+under asymmetric sectoral shocks)---the regional-economics antecedent of our
+$d_{\rm in}$ versus $d_{\rm out}$ distinction. \citet{boschma2015} show that the relative payoff to
 related versus unrelated diversification is institutionally contingent: coordinated
 market economies favour incremental related diversification, while liberal market
 economies support the unrelated, exploratory kind---a result that motivates treating
@@ -109,7 +112,8 @@ capability accumulation and product entry co-evolve, giving microfoundations to 
 empirical relatedness regularities. Second, \citet{mealy2022} demonstrate that the
 complexity toolkit transfers to any policy-relevant subset of products---their
 green-complexity indices show strong path dependence in capability accumulation
-($r\approx0.92$ between green-complexity potential and subsequent green-export
+(a $0.92$ correlation between green-complexity potential and the green-complexity
+index, with beginning-of-period potential predicting subsequent green-export
 growth)---a template we adopt when restricting attention to strategically dependent
 product categories. Third, \citet{nomaler2023} issue a confounding warning that
 directly disciplines our outcome construction: density-based relatedness metrics are
@@ -325,10 +329,10 @@ peripheral products in treated sectors. This is, in effect, a $d_{\rm in}$ respo
 to a trade-policy shock measured with product-vector tools---the closest antecedent
 in the literature for our main outcome. \citet{fontagne2022} provide the
 product-level trade elasticities that we use as Bartik weights: 5,050 HS6-digit
-elasticities estimated via PPML gravity, with a median of $-3.5$ and a range from
-$-18.5$ (minerals) to $-3.6$ (footwear) and $-6.1$ (machinery), capturing the
-heterogeneous disruption that a uniform tariff schedule imposes on firms with
-different product portfolios.
+elasticities estimated via PPML gravity, averaging $-5.3$ (median $-3.5$), with
+HS-section means spanning $-18.5$ (minerals), $-6.1$ (machinery), and $-3.6$
+(footwear), capturing the heterogeneous disruption that a uniform tariff schedule
+imposes on firms with different product portfolios.
 
 The dynamic and firm-level dimensions of portfolio adjustment are examined by
 \citet{crozet2021}, who study the effect of EU and US sanctions on the extensive
@@ -368,9 +372,20 @@ the volatility reduction that naive diversification logic predicts. For our sett
 this implies that Chinese firms which maintain $d_{\rm out}$ by pivoting to non-Western
 destinations face not only lower export levels but higher volatility---a double cost
 that reinforces the variance-minimising case for $d_{\rm in}$ consolidation.
-\citet{barbieri2024} further show that sectoral diversification (the $d_{\rm in}$
-analog) raises export intensity while geographic diversification (the $d_{\rm out}$
-analog) raises export stability, with institutional quality amplifying both channels.
+\citet{barbieri2024} provide a parallel decomposition at the territorial level:
+\emph{sectoral} diversification---a proxy for productive capabilities, the conceptual
+sibling of $d_{\rm in}$---raises export intensity, while \emph{geographic}
+diversification---a proxy for geoeconomic capabilities, loosely analogous to the
+resilience role we attribute to $d_{\rm out}$---is associated with greater export
+stability; institutional quality independently improves both margins.\footnote{The
+analogy is functional rather than literal. Barbieri's second axis is
+\emph{destinations}, whereas our $d_{\rm out}$ remains a \emph{product}-space
+measure (out-of-block products), following \citet{destefano2025}, who works in pure
+firm--product space with no destination dimension. The roles align---one margin scales
+output, the other buys resilience---but the underlying axes differ, and in their data
+the dominant stabiliser is EU market exposure rather than geographic diversification
+per se. We therefore treat the destination dimension as a second-stage extension
+(Section~\ref{subsec:spinoffs}) rather than as a component of $d_{\rm out}$.}
 
 We estimate treatment using the Global Tariff Database (GTD) of \citet{teti2024},
 the first applied-tariff panel to cover bilateral HS6 tariffs continuously from 1988
