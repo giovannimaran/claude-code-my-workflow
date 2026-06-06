@@ -14,7 +14,7 @@
 %     2.4  Strategic dependencies and geopolitical trade shocks
 %     2.5  Identification
 %     2.6  Contribution
-%   3   Expected Dynamics: What the Literature Predicts I Should Observe
+%   3   Expected Dynamics: What the Literature Predicts We Should Observe
 %     3.1  The out-of-block margin (d_out)
 %     3.2  The in-block margin (d_in) and retrenchment
 %     3.3  Share_core and the direction of adjustment
@@ -62,7 +62,7 @@ diversification is convex in the capability stock: countries with few capabiliti
 earn near-zero marginal returns from acquiring any single new one, generating the
 low-income quiescence trap that has been documented empirically across the
 income distribution \citep{hausmann2007}. This non-linearity is fundamental to the
-project of using complexity tools in a causal setting: treatment-effect heterogeneity
+agenda of using complexity tools in a causal setting: treatment-effect heterogeneity
 by capability endowment is an architectural feature of the framework, not an
 add-on.
 
@@ -79,45 +79,50 @@ growth trajectories while low-fitness countries exhibit chaotic dynamics---a pro
 that has direct implications for heterogeneous treatment responses in our setting:
 firms embedded in high-complexity capability clusters should display more systematic
 responses to tariff shocks than firms operating at the periphery of the product
-space. \citet{angelini2017} characterise the asymptotic dynamics of the FC map and
-confirm that the ranking it induces is stable under perturbation, a property we rely
-on when we anchor each firm's home block at baseline and track movement against it.
+space. \citet{angelini2017} characterise the long-run dynamics of products in the complexity
+plane, showing that they drift toward a stationary configuration so that
+shock-induced dislocations are transient and mean-reverting---which is why we treat
+product complexity as a well-defined pre-shock control and read post-shock movements
+against a fixed baseline.
 \citet{stojkoski2025} extend the framework to an optimisation context,
 showing that the ECI-growth relationship is stronger at lower income levels and that
 relatedness is one of several predictors of product-entry, a finding that validates
 the multi-dimensional block structure we exploit over simpler relatedness-only
-measures. \citet{koch2021} sounds a useful caution: the complexity-growth link
-weakens once value-added rather than gross exports is used, implying that complexity
-measures built on gross trade flows---as ours necessarily are at the firm-customs
-level---capture capability \emph{structure} more cleanly than they capture realised
-value capture, which is precisely why we treat the block partition as a measure of
-capability architecture rather than of performance.
+measures. \citet{koch2021} sounds a useful caution about what such metrics measure: the
+complexity--growth link is in fact \emph{stronger} when complexity is computed on
+value-added rather than gross exports ($R^2 = 0.63$ versus $0.31$), so gross-flow
+complexity blurs the connection to realised value capture. Since our firm-customs
+measures are necessarily built on gross flows, we read them as capturing capability
+\emph{structure} rather than realised value capture, which is precisely why we treat
+the block partition as a measure of capability architecture rather than of performance.
 
 Three strands sharpen what ``relatedness'' and ``diversification'' actually mean for
 the direction of adjustment. First, the related-variety tradition of
 \citet{frenken2007} distinguishes \emph{related} variety (entry into activities that
-share capabilities, which smooths regional employment and supports productivity
-growth) from \emph{unrelated} variety (which provides a portfolio hedge against
-asymmetric sectoral shocks)---the regional-economics antecedent of our $d_{\rm in}$
-versus $d_{\rm out}$ distinction. \citet{boschma2015} show that the relative payoff to
+share capabilities, which drives regional \emph{employment} growth through
+within-sector Jacobs spillovers---though, tellingly, not productivity growth) from
+\emph{unrelated} variety (which provides a portfolio hedge that lowers unemployment
+under asymmetric sectoral shocks). This is the regional-economics antecedent of our
+$d_{\rm in}$ versus $d_{\rm out}$ distinction. \citet{boschma2015} show that the relative payoff to
 related versus unrelated diversification is institutionally contingent: coordinated
 market economies favour incremental related diversification, while liberal market
-economies support the unrelated, exploratory kind---a result that motivates treating
+economies support the unrelated, exploratory kind, a result that motivates treating
 the regional production system, not just the firm, as a unit of heterogeneity.
 \citet{freire2019} provides a structural model of endogenous diversification in which
 capability accumulation and product entry co-evolve, giving microfoundations to the
 empirical relatedness regularities. Second, \citet{mealy2022} demonstrate that the
 complexity toolkit transfers to any policy-relevant subset of products---their
 green-complexity indices show strong path dependence in capability accumulation
-($r\approx0.92$ between green-complexity potential and subsequent green-export
-growth)---a template we adopt when restricting attention to strategically dependent
+(a $0.92$ correlation between green-complexity potential and the green-complexity
+index, with beginning-of-period potential predicting subsequent green-export
+growth), a template we adopt when restricting attention to strategically dependent
 product categories. Third, \citet{nomaler2023} issue a confounding warning that
 directly disciplines our outcome construction: density-based relatedness metrics are
-$\sim$93\% explained by diversity and ubiquity alone, so a measured ``relatedness''
+$\sim$93 percent explained by diversity and ubiquity alone, so a measured ``relatedness''
 effect can be an artefact of how many products a firm makes and how common those
-products are. Their symmetric treatment of RCA \emph{gains} and \emph{losses}---and
+products are. Their symmetric treatment of RCA \emph{gains} and \emph{losses}, together with
 the finding that lost specialisations are often \emph{more} complex than gained
-ones---reframes diversification as a two-sided entry-and-exit process and is one of the
+ones, reframes diversification as a two-sided entry-and-exit process and is one of the
 closest conceptual antecedents to our reconfiguration question.
 
 The application of complexity tools to firm-level data is recent and concentrated
@@ -162,8 +167,9 @@ partition against entropy null models---using the Bipartite Configuration Model 
 \citet{squartini2011} and \citet{saracco2015}, with the projection reconciliation of
 \citet{cimini2022}---is a required pre-processing step
 to ensure that block structure reflects genuine capability clustering rather than
-degree-sequence artefacts, and we implement it throughout. Additional firm-level EFC
-evidence from \citet{bontadini2021, bontadini2025} on multi-layer capability networks,
+degree-sequence artefacts, and we implement it throughout. Additional firm-level
+Economic Fitness and Complexity (EFC) evidence---the firm-level application of the FC
+algorithm to firm--product data---from \citet{bontadini2021, bontadini2025} on multi-layer capability networks,
 \citet{caldarola2024a, caldarola2024b} on sector-level relatedness, \citet{gnecco2023}
 on resilience, and \citet{albora2023a, albora2023b} on capability transitions rounds
 out the methodological base.
@@ -222,8 +228,8 @@ average response is genuinely ambiguous and should depend on shock intensity, ex
 the non-linearity our event study is designed to detect.
 
 The evolutionary perspective of \citet{dosi1988, dosi1995} adds a regime dimension:
-the rate and direction of capability accumulation depends not only on the firm's own
-endowment but on the technological regime of the sector---the opportunity conditions,
+the rate and direction of capability accumulation depend on both the firm's own
+endowment and the technological regime of the sector---the opportunity conditions,
 appropriability, and cumulativeness that structure search. Under Schumpeterian Mark
 II conditions (cumulative, large-firm-dominated regimes), incumbents sustain
 technological advantages through internal learning, generating the technological
@@ -249,7 +255,7 @@ capability accumulation in developing-country firms is even more path-dependent,
 with explicit investments in learning required to escape existing trajectories.
 \citet{storper1992} connects this to trade: product-based technological learning
 generates agglomeration economies in particular product-territory combinations, so
-that an adverse trade shock removes not only demand but the collective learning
+that an adverse trade shock removes both demand and the collective learning
 infrastructure that sustains capability accumulation---a channel that implies
 persistent, not merely transitory, capability effects of tariff shocks.
 
@@ -290,10 +296,10 @@ A large reduced-form literature establishes that tariff changes cause significan
 adjustments in firm outcomes. \citet{pavcnik2002} and \citet{topalova2011} document
 that trade liberalisation raises TFP through competitive selection and technology
 imports in Chilean and Indian manufacturing, respectively. \citet{amiti2007} show,
-for Indonesian firms, that input tariff reductions matter four times more than output
-tariff reductions for TFP growth---a finding driven by access to high-quality imported
-intermediates---and construct the shift-share input-tariff exposure variable that is
-the methodological template for our treatment. \citet{tomasi2022} replicates this
+for Indonesian firms, that input tariff reductions deliver TFP gains at least twice as
+large as those from output tariff reductions---a finding driven by access to high-quality
+imported intermediates---and construct the shift-share input-tariff exposure variable that is
+the methodological template for our treatment. \citet{tomasi2022} replicate this
 design for Vietnamese firms during the 2007 WTO accession, finding that governance
 quality moderates the tariff-TFP effect, providing the closest precedent for our
 moderated shift-share design with ExpDep as the heterogeneity variable.
@@ -311,9 +317,9 @@ unify the market-size, business-stealing, and escape-competition effects of trad
 innovation incentives, showing that the net effect on a firm's capability investment
 is sign-ambiguous and depends on its competitive position---the firm-level analogue of
 the exploitation--exploration tension. \citet{riverabatiz1991} establish the deeper
-point that integration affects growth through flows of \emph{ideas} and not only goods,
+point that integration affects growth through flows of \emph{ideas} as well as goods,
 so that a tariff shock that severs a firm from a technological frontier market can have
-permanent, not level, effects on its capability trajectory---reinforcing the
+permanent (growth-rate), not merely level, effects on its capability trajectory---reinforcing the
 persistence prediction from \citet{storper1992}.
 
 The most direct evidence that trade shocks restructure capability portfolios rather
@@ -325,10 +331,10 @@ peripheral products in treated sectors. This is, in effect, a $d_{\rm in}$ respo
 to a trade-policy shock measured with product-vector tools---the closest antecedent
 in the literature for our main outcome. \citet{fontagne2022} provide the
 product-level trade elasticities that we use as Bartik weights: 5,050 HS6-digit
-elasticities estimated via PPML gravity, with a median of $-3.5$ and a range from
-$-18.5$ (minerals) to $-3.6$ (footwear) and $-6.1$ (machinery), capturing the
-heterogeneous disruption that a uniform tariff schedule imposes on firms with
-different product portfolios.
+elasticities estimated via PPML gravity, averaging $-5.3$ (median $-3.5$), with
+HS-section means spanning $-18.5$ (minerals), $-6.1$ (machinery), and $-3.6$
+(footwear), capturing the heterogeneous disruption that a uniform tariff schedule
+imposes on firms with different product portfolios.
 
 The dynamic and firm-level dimensions of portfolio adjustment are examined by
 \citet{crozet2021}, who study the effect of EU and US sanctions on the extensive
@@ -368,9 +374,20 @@ the volatility reduction that naive diversification logic predicts. For our sett
 this implies that Chinese firms which maintain $d_{\rm out}$ by pivoting to non-Western
 destinations face not only lower export levels but higher volatility---a double cost
 that reinforces the variance-minimising case for $d_{\rm in}$ consolidation.
-\citet{barbieri2024} further show that sectoral diversification (the $d_{\rm in}$
-analog) raises export intensity while geographic diversification (the $d_{\rm out}$
-analog) raises export stability, with institutional quality amplifying both channels.
+\citet{barbieri2024} provide a parallel decomposition at the territorial level:
+\emph{sectoral} diversification (a proxy for productive capabilities, the conceptual
+sibling of $d_{\rm in}$) raises export intensity, while \emph{geographic}
+diversification (a proxy for geoeconomic capabilities, loosely analogous to the
+resilience role we attribute to $d_{\rm out}$) is associated with greater export
+stability; institutional quality independently improves both margins.\footnote{The
+analogy is functional rather than literal. Barbieri's second axis is
+\emph{destinations}, whereas our $d_{\rm out}$ remains a \emph{product}-space
+measure (out-of-block products), following \citet{destefano2025}, who works in pure
+firm--product space with no destination dimension. The roles align---one margin scales
+output, the other buys resilience---but the underlying axes differ, and in their data
+the dominant stabiliser is EU market exposure rather than geographic diversification
+per se. We therefore treat the destination dimension as a second-stage extension
+(Section~\ref{subsec:spinoffs}) rather than as a component of $d_{\rm out}$.}
 
 We estimate treatment using the Global Tariff Database (GTD) of \citet{teti2024},
 the first applied-tariff panel to cover bilateral HS6 tariffs continuously from 1988
@@ -379,13 +396,18 @@ TRAINS. \citet{teti2019} establish, using structural gravity, that Rules-of-Orig
 compliance is prohibitively costly for the machinery and electronics sectors at the
 core of Chinese exports, confirming that MFN tariffs---the rate captured by the
 GTD---are the economically relevant wedge for our firms. The welfare magnitudes from
-\citet{teti2025} calibrate our expected effect sizes: in a GE simulation of the
-2018--2025 US-China tariff war, firms in high-regulatory-dependence sectors experience
-income effects in the $-1.6$ percent range analogous to Canadian and Mexican
-exporters---substantially larger than the $-0.3$ percent Chinese aggregate, reflecting
-the uneven distribution of tariff exposure across product portfolios. The distortionary
+\citet{teti2025} calibrate our expected effect sizes: a GE simulation of the
+2018--2025 US--China tariff war estimates cumulative real-income losses of roughly
+$-1.6$ percent for Canada and Mexico---economies with high export exposure to the US
+market---against only $-0.3$ percent for China in the aggregate. We use the
+$-1.6$ percent figure as an external benchmark for the most exposed Chinese firms:
+by analogy with the highly exposed Canadian and Mexican case, the uneven distribution
+of tariff exposure across product portfolios should push firms concentrated in
+high-regulatory-dependence categories toward magnitudes well above the national
+average. The mapping from these country-level losses to firm-level exposure is our
+own; \citet{teti2025} simulate countries and US states, not firms. The distortionary
 role of size-contingent and sector-specific regulation documented by
-\citet{garicano2016}---who find welfare costs of 1.3--3.5\% of GDP from French
+\citet{garicano2016}---who find welfare costs of 1.3--3.5 percent of GDP from French
 size thresholds---is the domestic-policy analogue of this exposure heterogeneity and
 motivates controlling for regulatory environment in the moderation analysis.
 
@@ -402,7 +424,7 @@ controlled (flow restriction) and from which information can be extracted (panop
 effects). Crucially, weaponisation requires two joint conditions---jurisdictional
 control over the chokepoint and domestic institutions capable of deploying that control
 as a foreign policy instrument---which limits the set of products and bilateral
-relationships that qualify as strategic in the relevant sense. The Farrell-Newman
+relationships that qualify as strategic in the relevant sense. The Farrell--Newman
 framework grounds our moderation hypothesis: Chinese firms whose export baskets are
 concentrated in products where Western jurisdictions have identified chokepoint control
 face not a neutral tariff shock but one accompanied by active policy interest in
@@ -418,9 +440,10 @@ exceeding total EU export volume, so that domestic production cannot cover the i
 volume even in an emergency). Of approximately 5,000 HS6 products, 137 pass all three
 thresholds in the EU's most sensitive ecosystems, with China accounting for roughly
 52 percent of their import value. \citet{arjona2023} refine the methodology with a
-dynamic four-year threshold and a re-export correction that removes the 27 percent
-upward bias in CDI3 generated by transit trade, narrowing the dependent-product set
-to 204 items and providing the product classification we use to construct ExpDep.
+dynamic four-year threshold and a re-export correction: accounting for transit trade
+\emph{raises} the count of dependent products by roughly 27 percent, since ignoring
+re-exports understates true extra-EU reliance, yielding a dependent-product set of
+204 items that provides the product classification we use to construct ExpDep.
 The forward-looking scenario work of \citet{cagnin2021} situates these indicators in
 the EU's Open Strategic Autonomy agenda, projecting an escalation of dependency-reducing
 policy through 2040 that makes the persistence of any treatment effect we estimate a
@@ -438,7 +461,7 @@ pharmaceuticals, and precision instruments. The causal validity of the classific
 is demonstrated by two out-of-sample cases: the 2011 Japan earthquake and Thai floods,
 where products subsequently in short supply were correctly identified as Group~4 one
 year prior. The overlap between the Korniyenko Group~4 products and the
-Arjona CDI-dependent set defines the most extreme RegDependency exposure: products
+Arjona CDI-dependent set defines the most extreme ExpDep exposure: products
 that are simultaneously structurally concentrated, topologically fragile, and actively
 targeted by EU and US reshoring policy.
 
@@ -518,7 +541,7 @@ forced.
 
 This paper contributes to all five literatures described above. To the economic-complexity
 literature, we provide the first causal identification of a firm-level capability
-response---$d_{\rm in}$, $d_{\rm out}$, and Share\_core---to an exogenous external shock,
+response---$d_{\rm in}$, $d_{\rm out}$, and $\text{Share\_core}$---to an exogenous external shock,
 demonstrating that the block-modular firm--product partition is not merely a descriptive
 device but a meaningful predictor of differential adjustment paths. To the capability-theory
 and evolutionary-economics literatures, we offer empirical content for the
@@ -529,13 +552,13 @@ redeployment is constrained by the jointness of underlying knowledge inputs, whi
 magnitude is consistent with the permanent-effect predictions of \citet{storper1992}
 and the lock-in mechanism documented in the Schumpeterian Mark~II literature.
 
-To the trade literature, we shift the outcome from performance---the productivity,
-markup, and employment measures that dominate the Pavcnik--Topalova--Amiti generation---to
+To the trade literature, we shift the outcome from performance (the productivity,
+markup, and employment measures that dominate the Pavcnik--Topalova--Amiti generation) to
 capability architecture, providing evidence that the same tariff shocks that raise
 aggregate TFP through competitive selection simultaneously compress the capability
 frontier of exposed firms in ways that the performance lens does not reveal. To
-the strategic-dependency literature, we provide the first firm-level quantification
-of the Farrell-Newman chokepoint hypothesis: firms operating in CDI-dependent product
+the strategic-dependency literature, we take the Farrell--Newman chokepoint
+hypothesis to firm-level data: firms operating in CDI-dependent product
 categories display systematically larger capability consolidation effects than firms
 in non-dependent categories, and this heterogeneity is not explained by tariff
 magnitudes alone, consistent with the dual treatment of higher tariffs and active
@@ -546,7 +569,7 @@ is tractable at the scale of full-universe firm--product panels and that the
 heterogeneous-exposure shift-share settings with product-level clustering.
 
 % =============================================================================
-\section{Expected Dynamics: What the Literature Predicts I Should Observe}
+\section{Expected Dynamics: What the Literature Predicts We Should Observe}
 \label{sec:expected}
 % =============================================================================
 
@@ -606,7 +629,7 @@ is strongest exactly where capabilities are most cumulative. The expectation is
 therefore a \emph{positive} average effect on $d_{\rm in}$, larger for firms in
 complex, cumulative technological regimes, and---per \citet{storper1992} and
 \citet{riverabatiz1991}---persistent rather than transitory, because what is lost when
-a market closes is not only demand but the collective learning infrastructure that
+a market closes is more than demand: it is the collective learning infrastructure that
 sustained the broader basket.
 
 % ---------------------------------------------------------------------------
@@ -614,17 +637,17 @@ sustained the broader basket.
 \label{subsec:exp_share}
 % ---------------------------------------------------------------------------
 
-$\text{Share\_core} = d_{\rm in}/(d_{\rm in}+d_{\rm out})$ is the summary statistic
-that signs the exploitation--exploration choice of \citet{march1991}. If the $d_{\rm out}$
+The summary statistic $\text{Share\_core} = d_{\rm in}/(d_{\rm in}+d_{\rm out})$ signs
+the exploitation--exploration choice of \citet{march1991}. If the $d_{\rm out}$
 contraction and the $d_{\rm in}$ consolidation predicted above both materialise,
-Share\_core rises---the retrenchment hypothesis (H1). March's own result that
+$\text{Share\_core}$ rises---the retrenchment hypothesis (H1). March's own result that
 organisations systematically over-exploit makes this the modal expectation. But the
 literature is deliberately not unanimous: the dynamic-capabilities reading
 (\citealp{penrose1959}; \citealp{teece1982}) and the moderate-shock search prediction
-of \citet{matsusaka2001} leave open the exploration case (H1$'$), in which Share\_core
+of \citet{matsusaka2001} leave open the exploration case (H1$'$), in which $\text{Share\_core}$
 \emph{falls} because firms with slack treat the shock as a prompt to reallocate toward
 new capability bundles. The empirical question is therefore which force dominates on
-average, and---more informatively---where in the firm distribution the sign flips. The
+average, and, more informatively, where in the firm distribution the sign flips. The
 strong prior, following \citet{destefano2025}, is that the average response is toward
 the growth-\emph{negative} core (H1), because the growth-positive $d_{\rm out}$ margin
 is precisely the one that sunk costs and variance costs make hardest to defend under
@@ -663,13 +686,14 @@ Table~\ref{tab:hyp} collects the hypotheses, their literature sources, and the s
 each predicts. Table~\ref{tab:mag} brackets the plausible magnitude range using two
 external benchmarks: a lower bound from pure network-disruption transmission
 (\citealp{korniyenko2017}: a 1pp rise in risky imports from a disaster-struck origin
-cuts the importer's own exports by $\sim$0.7\%, with no policy response) and an upper
-bound from a fully targeted policy shock on high-dependency firms (\citealp{teti2025}:
-$-1.6$\% real income for high-regulatory-dependence Canadian and Mexican firms under
-the 2018 US tariffs, versus $-0.3$\% for the average Chinese firm). The working
-hypothesis for the $d_{\rm out}$ response is therefore $\approx$0.3--0.7\% per
-standard-deviation increase in TariffShock on average, rising to 1.0--1.6\% for
-top-quartile RegDependency firms; estimates outside this band should trigger a
+cuts the importer's own exports by $\sim$0.7 percent, with no policy response) and an upper
+bound from the most exposed economies in a targeted tariff war (\citealp{teti2025}:
+$-1.6$ percent cumulative real income for Canada and Mexico under the 2018--2025 US tariffs,
+versus $-0.3$ percent for China in the aggregate---a country-level benchmark we map onto the
+most exposed Chinese firms). The working
+hypothesis for the $d_{\rm out}$ response is therefore $\approx$0.3--0.7 percent per
+standard-deviation increase in TariffShock on average, rising to 1.0--1.6 percent for
+top-quartile ExpDep firms; estimates outside this band should trigger a
 measurement and sample audit before any theoretical reinterpretation.
 
 \begin{table}[ht]
@@ -716,12 +740,12 @@ steeper gradient \\
 Lower bound --- pure network disruption \citep{korniyenko2017} & $\sim 0.7\%$ &
 Supply-chain transmission of a localised shock, no policy intervention. \\
 \hline
-Upper bound --- targeted policy shock, high-dependency firms \citep{teti2025} & $\sim 1.6\%$ &
-High-regulatory-dependence firms under the 2018 US tariffs (vs.\ $-0.3\%$ aggregate). \\
+Upper bound --- most exposed economies, targeted tariff war \citep{teti2025} & $\sim 1.6\%$ &
+Country-level loss for Canada/Mexico under the 2018--2025 US tariffs (vs.\ $-0.3\%$ for China), mapped onto the most exposed firms. \\
 \hline
 Working hypothesis --- average firm & $0.3$--$0.7\%$ & Modest mean effect; heterogeneity dominates. \\
 \hline
-Working hypothesis --- top-quartile RegDependency & $1.0$--$1.6\%$ & Approaches the targeted-shock upper bound. \\
+Working hypothesis --- top-quartile ExpDep & $1.0$--$1.6\%$ & Approaches the targeted-shock upper bound. \\
 \hline
 \end{tabular}
 \end{table}
@@ -749,7 +773,7 @@ measures block-modular capability structure but almost always descriptively. No 
 work links a \emph{predetermined, exogenous} trade-policy shock to the in/out
 decomposition of firm diversification. This paper supplies that causal link.
 
-\item \textbf{Composition, not performance.} The Pavcnik--Topalova--Amiti generation
+\item \textbf{Composition, not performance.} The trade-and-productivity literature
 (\citealp{pavcnik2002}; \citealp{topalova2011}; \citealp{amiti2007}; \citealp{tomasi2022})
 measures how tariff shocks move productivity, markups, and survival. Because
 performance dimensions decouple from capability (\citealp{grazzi2012};
@@ -761,11 +785,11 @@ of the export basket.
 literature (\citealp{farrell2019}; \citealp{euc2021}; \citealp{arjona2023};
 \citealp{korniyenko2017}) maps dependencies at the product and country level but has no
 firm-level causal test. By interacting the tariff shock with a firm-specific
-strategic-dependence exposure, this paper provides the first such test.
+strategic-dependence exposure, this paper provides that test.
 
 \item \textbf{A signed reading of exploration vs.\ exploitation under a real shock.}
 March's (\citeyear{march1991}) tension has rich theory but little exogenous-shock
-evidence at the firm level. The Share\_core outcome under a predetermined tariff shock
+evidence at the firm level. The $\text{Share\_core}$ outcome under a predetermined tariff shock
 delivers a directly signed estimate of which way firms move when their core is
 threatened.
 
@@ -810,7 +834,7 @@ changes, and a cleaner test of the escalation dynamic of \citet{evenett2024}.
 
 \paragraph{(d) Instrumenting the policy-escalation component.}
 \citet{evenett2024} document that industrial-policy intensity rises in election years
-and that subsidies are matched tit-for-tat with 73.8\% probability. An election-cycle
+and that subsidies are matched tit-for-tat with 73.8 percent probability. An election-cycle
 or tit-for-tat instrument for the policy-driven component of a firm's tariff shock
 would separate the escalation channel from the mechanical tariff change---turning the
 escalation caveat of this paper into an identification strategy of its own.
@@ -828,8 +852,8 @@ transition.
 the related-versus-unrelated balance, depend on institutional quality. Exploiting
 within-China regional institutional variation as a second moderator would test whether
 capability retrenchment under trade shocks is steeper or shallower where market
-institutions are weaker---distinguishing capability-exploitation from
-institutional-substitution motives for diversification.
+institutions are weaker, distinguishing capability exploitation from
+institutional substitution as motives for diversification.
 
 \paragraph{(g) The gain/loss asymmetry of complexity.}
 \citet{nomaler2023} show that lost specialisations are often \emph{more} complex than
