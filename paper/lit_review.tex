@@ -125,15 +125,16 @@ the finding that lost specialisations are often \emph{more} complex than gained
 ones, reframes diversification as a two-sided entry-and-exit process and is one of the
 closest conceptual antecedents to our reconfiguration question.
 
-The application of complexity tools to firm-level data is recent and concentrated
-in the Italian literature. \citet{bruno2018, bruno2023} construct firm-product bipartite
+The application of complexity tools to firm-level data is recent. \citet{bruno2018, bruno2023} construct firm-product bipartite
 networks from Customs microdata and show that RCA-based binarisation
 (with BiCM entropy-null correction as a robustness) yields block-modular structures
 that are stable across years and meaningfully predict firm growth, innovation, and
-survival. \citet{pugliese2017, pugliese2019} document that firm-level fitness is a
-robust predictor of subsequent product upgrading and export performance, and that the
-rank order of firms within a capability cluster is informative about future mobility---a
-finding that motivates our within-block heterogeneity analysis. \citet{coad2021} push
+survival. \citet{pugliese2019} show that firms diversify coherently within their
+existing technological portfolio, so that a firm's position within its capability
+cluster is informative about its future mobility---a finding that motivates our
+within-block heterogeneity analysis; the country-level analogue is \citet{pugliese2017},
+who show that complex economies escape the low-income trap by moving laterally into
+related capabilities. \citet{coad2021} push
 this furthest, applying the FC algorithm to a firm$\times$capability matrix for $\sim$40{,}000
 Indian firms and recovering a nested ``capabilities ladder'' whose rungs predict growth
 and survival but---tellingly---not profitability, a decoupling we return to in
@@ -167,12 +168,13 @@ partition against entropy null models---using the Bipartite Configuration Model 
 \citet{squartini2011} and \citet{saracco2015}, with the projection reconciliation of
 \citet{cimini2022}---is a required pre-processing step
 to ensure that block structure reflects genuine capability clustering rather than
-degree-sequence artefacts, and we implement it throughout. Additional firm-level
-Economic Fitness and Complexity (EFC) evidence---the firm-level application of the FC
-algorithm to firm--product data---from \citet{bontadini2021, bontadini2025} on multi-layer capability networks,
-\citet{caldarola2024a, caldarola2024b} on sector-level relatedness, \citet{gnecco2023}
-on resilience, and \citet{albora2023a, albora2023b} on capability transitions rounds
-out the methodological base.
+degree-sequence artefacts, and we implement it throughout. A wider set of Economic Fitness and
+Complexity (EFC) studies---broader applications of economic-complexity methods---rounds
+out the methodological base: global-value-chain specialisation \citep{bontadini2021, bontadini2025},
+the complexity of structural change and the sustainability transition
+\citep{caldarola2024a, caldarola2024b}, machine-learning reconstruction of trade flows
+\citep{gnecco2023}, and relatedness-based forecasting of industrial upgrading
+\citep{albora2023a, albora2023b}.
 
 % ---------------------------------------------------------------------------
 \subsection{Capability Theory, Corporate Coherence, and the Direction of Adjustment}
@@ -690,18 +692,16 @@ cuts the importer's own exports by $\sim$0.7 percent, with no policy response) a
 bound from the most exposed economies in a targeted tariff war (\citealp{teti2025}:
 $-1.6$ percent cumulative real income for Canada and Mexico under the 2018--2025 US tariffs,
 versus $-0.3$ percent for China in the aggregate---a country-level benchmark we map onto the
-most exposed Chinese firms). The working
-hypothesis for the $d_{\rm out}$ response is therefore $\approx$0.3--0.7 percent per
-standard-deviation increase in TariffShock on average, rising to 1.0--1.6 percent for
-top-quartile ExpDep firms; estimates outside this band should trigger a
-measurement and sample audit before any theoretical reinterpretation.
+most exposed Chinese firms).
 
 \begin{table}[ht]
 \centering
 \caption{Hypotheses, literature sources, and predicted signs.}
 \label{tab:hyp}
-\small
-\begin{tabular}{p{1.3cm} p{4.4cm} p{4.6cm} p{2.4cm}}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|c|p{4.4cm}|p{4.2cm}|p{2.5cm}|}
 \hline
 \textbf{Hyp.} & \textbf{Statement} & \textbf{Principal literature source} & \textbf{Predicted effect} \\
 \hline
@@ -715,7 +715,7 @@ $d_{\rm out}\uparrow$ (frontier-firm tail only) \\
 \hline
 H2 & The retrenchment response is amplified in more strategically dependent production systems. &
 \citet{farrell2019}; \citet{arjona2023}; \citet{korniyenko2017}; \citet{evenett2024} &
-$\beta_{2}$ on $\text{Tariff}\times\text{ExpDep} > 0$ \\
+$\beta_{2}>0$ on Tariff $\times$ ExpDep \\
 \hline
 H3 & The $d_{\rm out}$ contraction is hysteretic (does not reverse within the window). &
 \citet{crozet2021}; \citet{storper1992}; \citet{riverabatiz1991} &
@@ -732,8 +732,10 @@ steeper gradient \\
 \centering
 \caption{Magnitude benchmarks for the $d_{\rm out}$ response (per s.d.\ of TariffShock).}
 \label{tab:mag}
-\small
-\begin{tabular}{p{4.0cm} p{3.2cm} p{5.2cm}}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{3.8cm}|c|p{6.2cm}|}
 \hline
 \textbf{Benchmark} & \textbf{Magnitude} & \textbf{Interpretation} \\
 \hline
@@ -742,10 +744,6 @@ Supply-chain transmission of a localised shock, no policy intervention. \\
 \hline
 Upper bound --- most exposed economies, targeted tariff war \citep{teti2025} & $\sim 1.6\%$ &
 Country-level loss for Canada/Mexico under the 2018--2025 US tariffs (vs.\ $-0.3\%$ for China), mapped onto the most exposed firms. \\
-\hline
-Working hypothesis --- average firm & $0.3$--$0.7\%$ & Modest mean effect; heterogeneity dominates. \\
-\hline
-Working hypothesis --- top-quartile ExpDep & $1.0$--$1.6\%$ & Approaches the targeted-shock upper bound. \\
 \hline
 \end{tabular}
 \end{table}
