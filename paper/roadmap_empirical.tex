@@ -1,0 +1,426 @@
+% =============================================================================
+% Empirical Roadmap --- Firm-Level Capability Reconfiguration under Trade Shocks
+% Restructured to match the converged specification:
+%   - CONTINUOUS Bartik x Fontagne tariff dose (not a binary staggered switch)
+%   - Capability map: three constructions (frozen / predetermined-evolving /
+%     contemporaneous-descriptive) + a binary control-group-map design fork
+%   - Distributed-lag dynamics primary; Sun-Abraham demoted to discretised
+%     robustness; dCDH-continuous + Callaway-Goodman-Bacon-Sant'Anna primary
+%     robustness; Adao + Borusyak-Hull inference (native to continuous exposure)
+% Eight parts. Each: data | method (+ source) | robustness | checks |
+%   real questions | referee-2 doubts.
+% Compile: XeLaTeX (3 passes) + bibtex against ../Bibliography_base.bib
+% =============================================================================
+\documentclass[11pt]{article}
+
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[round,authoryear]{natbib}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,allcolors=blue!55!black]{hyperref}
+\usepackage{mdframed}
+
+\newcommand{\din}{d_{\mathrm{in}}}
+\newcommand{\dout}{d_{\mathrm{out}}}
+\newcommand{\sharecore}{\mathrm{Share\_core}}
+\newmdenv[linecolor=red!55!black,linewidth=0.8pt,
+          backgroundcolor=red!3,skipabove=4pt,skipbelow=4pt]{ref2}
+\newcommand{\R}[1]{\par\smallskip\noindent\textbf{\textcolor{red!55!black}{R2 $\blacktriangleright$}} #1}
+\newcommand{\HOT}{\textbf{\textcolor{red!60!black}{[HOT]}}\ }
+
+\title{\textbf{Empirical Roadmap (v2): Data, Network, Treatment, Econometrics}\\[2pt]
+\large Firm-Level Export Diversification and Capability Reconfiguration\\[2pt]
+\normalsize\itshape Aligned to the continuous-treatment, predetermined-map specification}
+\author{G.\ Maran \quad (University of Trento)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{What changed from v1.} The treatment is now an explicitly
+\emph{continuous, time-varying} Bartik dose (not a binary staggered switch); the
+dynamic estimator is a distributed-lag event study (Sun--Abraham is demoted to a
+discretised robustness); inference is \citet{adao2019} plus
+\citet{borusyakhull2022}, native to continuous exposure; and the capability map is
+organised into three causal-grade constructions plus one design fork. Read
+Part~\ref{part:map} first --- it decides everything downstream.
+
+\tableofcontents
+
+% =============================================================================
+\section{Part 0 --- Foundations: data inventory and code harmonisation}
+\label{part:data}
+% =============================================================================
+
+\subsection{Data needed, and where each enters}
+\begin{center}\small
+\begin{tabular}{@{}p{3.0cm}p{3.2cm}p{2.4cm}p{4.7cm}@{}}
+\toprule
+\textbf{Dataset} & \textbf{Grain} & \textbf{Enters at} & \textbf{Role} \\
+\midrule
+China Customs & firm$\times$HS6$\times$dest$\times$year & Parts I--III &
+network; baseline shares $s_{ip,\mathrm{pre}}$; product entry/exit for $\din/\dout$ \\
+NBS Annual Survey & firm$\times$year & Parts VI--VII &
+ownership (SOE/private, \citealp{guariglia2011}), size, age, financials \\
+Teti GTD \citep{teti2024} & imp$\times$exp$\times$HS6$\times$year & Part III &
+the tariff \emph{shifts} $\Delta\ln(1+\tau_{pt})$ \\
+Fontagn\'e et al.\ \citeyearpar{fontagne2022} & HS6 ($+$section) & Part III &
+product elasticities $\varepsilon_p$; section fallback \\
+Strategic-dependence list & HS6 & Part V &
+$\mathrm{RegDep}$ moderator \citep{farrell2019,arjona2023} \\
+HS concordances & code maps & Part 0 & one HS vintage \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Code harmonisation rule (do once, first)}
+Map \emph{every} product-keyed file to a single HS vintage --- HS2007 (5{,}052
+codes), to match \citet{fontagne2022}. Mismatched vintages silently drop products
+and bias $\dout$. Keep an explicit concordance and log every unmatched code. The
+network outcomes are built on the \emph{export} basis \citep[not production:][]{destefano2025};
+state this as a scope condition (we measure export-revealed capability, which is
+exactly the object a tariff-on-exports shock acts on).
+
+% =============================================================================
+\section{Part I --- The capability map: three constructions and a design fork}
+\label{part:map}
+% =============================================================================
+
+\subsection{The organising principle}
+The map is the \emph{measuring instrument} for the outcome. A map estimated on
+post-shock data co-moves with the treatment, so $\din/\dout$ and the denominator
+$(\din+\dout)$ become endogenous. The whole design therefore turns on one rule:
+\textbf{everything that could mechanically respond to the shock must be
+predetermined.} Below, ``congelare'' (freeze) means: estimate the partition once,
+before the shock, and never re-estimate it --- it becomes a fixed lookup grid.
+
+\subsection{The menu (this replaces the v1 A/B/C table)}
+\begin{center}\small
+\begin{tabular}{@{}p{2.6cm}p{4.6cm}p{5.7cm}@{}}
+\toprule
+\textbf{Construction} & \textbf{What varies over $t$} & \textbf{Causal status} \\
+\midrule
+\textbf{(i) Frozen baseline} \emph{(headline)} &
+only RCA incidence $M_{fpt}$; block map $b(p)$ and core $c(f)$ frozen on a
+pre-shock window &
+\textbf{Clean.} Map predetermined; movement is the firm relocating on a fixed grid.
+Fewest researcher d.o.f. Staleness $\Rightarrow$ attenuation (honest). \\[2pt]
+\textbf{(ii) Predetermined evolving} \emph{(A$'$)} &
+map evolves but estimated only on \emph{pre-shock} slices (multilayer,
+\citealp{mucha2010}), then extrapolated forward &
+\textbf{Clean.} Nests (i) as the strong-coupling limit; captures pre-existing
+capability drift; cost = measurement error growing with horizon. \\[2pt]
+\textbf{(iii) Contemporaneous multilayer} &
+map uses all years incl.\ post-shock &
+\textbf{Not identified under continuous treatment} (no never-treated control group
+to anchor the map). \emph{Descriptive mechanism only.} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{The design fork (only under a modified treatment).} Were we to trade the
+continuous dose for a \emph{binary, staggered} treatment, the not-yet-treated firms
+would supply a treatment-independent control group from which to estimate a
+\emph{contemporaneous yet exogenous} evolving map \citep[control-group construction
+of][]{callawaysantanna2021}. This makes (iii) causally admissible --- elegant, but
+it discards the exposure-intensity information that motivates the continuous design.
+We keep continuous$+$(i) as primary and present the binary control-group map as a
+deliberate fork, not the headline.
+
+\subsection{Headline construction (i), explicitly}
+Let $B_0$ be a strictly pre-shock baseline window.
+\begin{enumerate}[label=(\arabic*),leftmargin=1.8em,noitemsep]
+  \item Build $M^{B_0}_{fp}$; validate with BiCM \citep{squartini2011,saracco2015,cimini2022};
+        run BRIM \citep{barber2007} \emph{once} $\Rightarrow$ frozen $b(p)$ and
+        $c(f)=\arg\max_b\sum_{p:b(p)=b}M^{B_0}_{fp}$. Both time-invariant.
+  \item Each year $t$: recompute only $M_{fpt}=\mathbf 1\{\mathrm{RCA}_{fpt}\ge1\}$
+        and read
+        $d_{\mathrm{in},ft}=\sum_{p:b(p)=c(f)}M_{fpt}$,
+        $d_{\mathrm{out},ft}=\sum_{p:b(p)\ne c(f)}M_{fpt}$.
+\end{enumerate}
+
+\subsection{$B_0$ is not the parallel-trends window (no-overlap rule)}
+Two distinct ``pre'' windows that must not coincide:
+\begin{itemize}[leftmargin=1.4em,noitemsep]
+  \item $B_0$ --- short ($\sim$3yr average, RCA is noisy at one year), placed early,
+        used to \emph{construct} the frozen map and the predetermined shares.
+  \item Lead window --- $\sim$5 pre-shock years \emph{kept in the estimation} to
+        test parallel trends (the distributed-lag leads).
+\end{itemize}
+If the same years define the shares/map \emph{and} test the leads, the correlation
+is mechanical. Rule: $B_0$ sits at or before the start of the lead window.
+\[
+  \underbrace{[-8,\,-6]}_{B_0:\ s_{ip,\mathrm{pre}},\,b(p),\,c(f)}
+  \quad
+  \underbrace{[-5,\,-1]}_{\text{leads }\beta_{-5..-2},\ \beta_{-1}=\text{ref}}
+  \quad \bullet\,(t{=}0)\quad
+  \underbrace{[+1,\,+L]}_{\text{lags: hysteresis (H3)}}
+\]
+
+\subsection{Two patch rules (Referee 2 asks first)}
+\begin{itemize}[leftmargin=1.4em,noitemsep]
+  \item \textbf{Product with no baseline block:} assign by product-space proximity,
+        or drop and report the affected export share. (This --- not a ``ghost
+        firm'' --- is the clean fix to keeping the product set alive.)
+  \item \textbf{Firm born after $B_0$:} handle inside the exit/selection analysis,
+        do \emph{not} assign a post-baseline core (that re-imports post-shock info).
+  \item \textbf{Balassa denominator:} headline is the standard contemporaneous
+        \emph{within-China} benchmark $\sum_{f'}x_{f'pt}$ --- the China-relative measure
+        that is internally consistent with the Chinese firm--product network from which
+        the blocks are built; we keep it. \emph{Inference concern (second-order):} a
+        sector-wide shock collapses the aggregate Chinese export of a treated product,
+        inflating every exposed firm's RCA and moving crossings for non-firm reasons.
+        \emph{Robustness ladder:} (1) leave-one-out within-China denominator
+        $\sum_{f'\neq f}x_{f'pt}$ --- preserves the China referent, removes reflexivity;
+        (2) rest-of-world (ex-China) BACI benchmark --- more aggressive, trades the
+        China referent for full exogeneity.
+\end{itemize}
+
+\subsection{On the multilayer (ii)/(iii): what is and isn't causal}
+The temporal multilayer of \citet{mucha2010} stacks yearly bipartite networks with an
+inter-slice coupling $\omega$; $\omega\to\infty$ reproduces the frozen map (i),
+$\omega\to 0$ reproduces independent yearly partitions. Choose $(\omega,\gamma)$ by
+partition stability \citep{bazzi2016}, ordinal (adjacent-year) coupling. \emph{Causal
+use requires the map be predetermined}: estimate on pre-shock slices and extrapolate
+(ii), or use a leave-one-out partition that excludes the focal firm from the map that
+classifies it (breaks reflexivity; the general-equilibrium channel remains). The
+contemporaneous map (iii) is reserved for \emph{describing} how the capability space
+reorganises (community birth/merge/split, firm migration), never as the causal outcome.
+
+\subsection{Robustness, checks, real questions, R2}
+\textbf{Robustness:} RCA threshold ($\ge1$ / continuous / BiCM); BRIM vs Louvain
+\citep{blondel2008} vs extremal opt.\ \citep{ducharenas2005} vs Infomap
+\citep{rosvall2008} (report NMI/VI); resolution sweep; (i) vs (ii) vs leave-one-out;
+BiCM link survival; within-block NODF \citep{almeidaneto2008,soleribalta2018} stability.\\
+\textbf{Checks:} pre-period partition stability (NMI across two $B_0$ sub-windows ---
+needs $B_0\ge3$yr); block count/modularity per year; $\din+\dout$ reconciles with
+total RCA count.\\
+\textbf{Real questions:} blocks real (BiCM)? predetermined (frozen/pre-shock)? core
+block well-defined for multi-block firms (tie-break rule)?
+\begin{ref2}
+\R{``Blocks are size$\times$ubiquity relabelled.''} BiCM survival $+$ diversity/ubiquity
+controls \citep{nomaler2023} in the main spec (Part IV).
+\R{``Your frozen map is stale/arbitrary.''} (ii) on pre-shock multilayer leaves
+estimates intact; staleness is attenuation, not confounding.
+\R{``The partition is fit on the same data as the outcome.''} Frozen/pre-shock map
+$+$ leave-one-out.
+\end{ref2}
+
+% =============================================================================
+\section{Part II --- Network mechanics and the outcome panel}
+\label{part:net}
+% =============================================================================
+
+\subsection{Methodology (+ source)}
+RCA (Balassa) at the firm level,
+$\mathrm{RCA}_{fpt}=\frac{x_{fpt}/\sum_{p'}x_{fp't}}{\sum_{f'}x_{f'pt}/\sum_{f'p'}x_{f'p't}}$,
+binarised at $1$ \citep[firm-level transfer of][]{hidalgo2011,bruno2018,bruno2023};
+BiCM validation \citep{squartini2011,saracco2015,cimini2022}; BRIM partition
+\citep{barber2007} optimised by Louvain \citep{blondel2008}; within-block ranking by
+in-block nestedness $I$ \citep{soleribalta2018} scored with NODF
+\citep{almeidaneto2008}; outcomes per \citet{destefano2025}:
+$\sharecore=\din/(\din+\dout)$.
+
+\subsection{What the panel looks like, and the four analyses}
+The object is a firm$\times$year panel of integer counts $\din,\dout$, the ratio
+$\sharecore\in[0,1]$, and the continuous $\mathrm{TariffShock}_{it}$. Most firms are
+coherent (high $\sharecore$, small $\dout$) --- Destefano's modular structure. Under
+the dose you expect $\dout\!\downarrow$, $\din$ holding, $\sharecore\!\uparrow$ (H1).
+Four analyses extract the panel reconfiguration:
+\begin{enumerate}[label=(\alph*),leftmargin=1.8em,noitemsep]
+  \item \textbf{Binned dose--response:} mean $\Delta\sharecore$ (and $\Delta\dout$)
+        by exposure quantile.
+  \item \textbf{Distributed-lag panel} (Part IV): the dynamics/hysteresis.
+  \item \textbf{Two margins separately:} $\sharecore$ can rise because $\dout$ falls
+        (defensive pruning) \emph{or} $\din$ rises (active consolidation) --- run
+        $\din$ and $\dout$ as separate outcomes, not only the ratio.
+  \item \textbf{Reconfiguration flow matrix:} per firm, classify product transitions
+        (in-block retained/dropped, out-block retained/dropped) against the frozen
+        grid; regress $\Pr(\text{dropped})$ on the dose. Prediction:
+        $\Pr(\text{periphery dropped})\gg\Pr(\text{core dropped})$. This is the most
+        granular reconfiguration test and feeds the Nomaler--Verspagen spin-off
+        (are dropped products more complex?).
+\end{enumerate}
+
+\subsection{Data-handling hot points (Part I/II references)}
+\begin{itemize}[leftmargin=1.4em,noitemsep]
+  \item \HOT \citet{destefano2025} keep only firms exporting every year 1993--2017
+        (survivor filter) and \emph{collapse the panel to a cross-section} around
+        $t^\ast{=}2015$. We \emph{depart on both}: unbalanced/exit-aware panel, and
+        we keep the time variation they smooth away (our event study needs it). We
+        cite them for the outcome construction, not the dynamic design.
+  \item \citet{destefano2025} use one \emph{pooled} 7-block partition (not
+        year-specific) on the \emph{export} basis $\Rightarrow$ supports our
+        frozen/pre-shock choice; RCA$>$1 ``size-agnostic''; no BiCM --- our BiCM is a
+        strengthening, not a replication.
+  \item \citet{bruno2018,bruno2023} use RCA$+$BiCM/BiWCM entropy-null; block
+        structure stable across years and predictive of growth/survival --- the
+        precedent for our required BiCM step.
+\end{itemize}
+
+% =============================================================================
+\section{Part III --- The treatment: continuous Bartik $\times$ Fontagn\'e}
+\label{part:treat}
+% =============================================================================
+
+\subsection{Construction (+ source)}
+\[
+  \mathrm{TariffShock}_{it}
+  =\sum_p \underbrace{s_{ip,\mathrm{pre}}}_{\text{Customs, predetermined}}
+          \underbrace{\varepsilon_p}_{\text{\citet{fontagne2022}}}
+          \underbrace{\Delta\ln(1+\tau_{pt})}_{\text{\citet{teti2024}}},
+\]
+a \emph{continuous, time-varying, non-absorbing} dose, in the input-tariff shift-share
+tradition of \citet{amiti2007}, \citet{topalova2011}, \citet{tomasi2022}.
+\textbf{Role split:} the Bartik structure says \emph{who} is exposed (predetermined
+shares); $\varepsilon_p$ says \emph{how hard a given tariff bites} per product. We do
+\emph{not} binarise: discretising would discard the exposure-intensity variation that
+identifies the dose--response. $\varepsilon_p$ is a \emph{product} parameter estimated
+by \citet{fontagne2022} on 152 importers $\times$ 189 exporters --- external to our
+firms; non-significant estimates inherit the HS-section mean.
+
+\subsection{Exogeneity, defended on both routes}
+The predetermined shares satisfy the Bartik condition. We defend it from the
+\emph{shares} \citep{goldsmithpinkham2020} --- reporting Rotemberg weights --- and from
+the \emph{shocks} \citep{borusyakhull2022} --- a recentred-instrument specification.
+
+\subsection{Robustness / checks / hot points / R2}
+\textbf{Robustness:} $\varepsilon$-weighted vs unweighted; Fontagn\'e significant-only
+vs section-fallback vs drop; $B_0$ window 2/3/5yr; Rotemberg diagnostics; recentering.\\
+\textbf{Checks:} $\sum_p s_{ip,\mathrm{pre}}{=}1$, shares strictly predetermined; dose
+distribution (winsorise outliers); Teti$\leftrightarrow$Customs HS6 match; ad-valorem
+equivalents of specific tariffs; \emph{products whose tariffs rose} (not only fell).\\
+\textbf{Hot points:} \HOT \citet{amiti2007} use a $\ge20$-employee size floor; NBS is
+``above-scale'' --- both truncate the small firms \citet{vannoorenberghe2016} flag as
+diversifying differently. Inherit \citet{amiti2007}'s endogeneity defences: FE,
+institutional argument, and a \emph{base-year-tariff IV}. \citet{fontagne2022} drop
+exporters never exporting $k$, and cap unit values ($>3\times$/$<\tfrac13$ median).
+\begin{ref2}
+\R{``Fontagn\'e elasticities aren't Chinese.''} Product-level, multilateral; $\varepsilon_p$
+is structural.
+\R{``It's demand, not capability.''} $\sharecore$ is scale-free; a uniform demand shock
+that scales all products does not move it.
+\R{``Treatment contaminated by escalation.''} Concede \citep{evenett2024}; restrict to
+the clean pre-escalation window or instrument the escalation component.
+\end{ref2}
+
+% =============================================================================
+\section{Part IV --- Econometrics for a continuous dose}
+\label{part:econ}
+% =============================================================================
+
+\subsection{Static and dynamic specifications (+ source)}
+\textbf{Static (headline magnitude):}
+$Y_{it}=\beta\,\mathrm{TariffShock}_{it}+\alpha_i+\delta_t+X_{it}'\gamma+\varepsilon_{it}$,
+$Y\in\{\din,\dout,\sharecore\}$, $X$ including diversity and ubiquity
+\citep{nomaler2023}; the continuous analogue of \citet{amiti2007,topalova2011}. Signs:
+$\beta_{\dout}<0$, $\beta_{\din}>0$, $\beta_{\sharecore}>0$.\\[2pt]
+\textbf{Dynamic (distributed lag, primary):}
+$Y_{it}=\sum_{k}\beta_k\,\mathrm{TariffShock}_{i,t-k}+\alpha_i+\delta_t+\varepsilon_{it}$;
+leads ($k<0$) are the parallel-trends test, lags ($k>0$) trace hysteresis (H3). This
+replaces the v1 Sun--Abraham primary, whose cohort structure assumes a binary switch.
+
+\subsection{Estimator robustness (continuous-first horse race)}
+\begin{enumerate}[leftmargin=1.6em,noitemsep]
+  \item \citet{dechaisemartin2020} --- non-binary, non-absorbing dynamic estimator
+        (the continuous substitute for Sun--Abraham).
+  \item \citet{callawaygoodmanbacon2024} --- continuous-treatment DiD; reports the
+        ATT$(d|d)$ vs the dose--response ACRT.
+  \item \emph{After discretising exposure into terciles:} \citet{sunabraham2021},
+        \citet{callawaysantanna2021}, \citet{borusyak2024}.
+  \item FE saturation (sector$\times$year, province$\times$year, firm trends);
+        anticipation; placebo (dose assigned to pre-period).
+\end{enumerate}
+\textbf{The continuous-specific caveat:} \citet{callawaygoodmanbacon2024} show the
+dose--response slope needs \emph{no selection into dose level} --- a stronger
+parallel-trends requirement than the binary case. We probe but cannot fully test it.
+
+\subsection{Heterogeneity}
+$\mathrm{TariffShock}\times\mathrm{RegDep}$ \citep{farrell2019,arjona2023}: high-dependence
+firms show larger $\din$ consolidation, not explained by tariff magnitude alone
+(tariff $+$ reshoring on the same products). $\times$SOE/private \citep{guariglia2011}:
+constrained private retrench more sharply; soft-budget SOEs muted.
+
+% =============================================================================
+\section{Part V --- Inference}
+\label{part:inf}
+% =============================================================================
+Primary: shift-share-robust standard errors of \citet{adao2019} --- native to
+continuous exposure, where units sharing product exposure are correlated even across
+firms and conventional clustering understates SE. Report firm- and sector-clustered SE
+alongside (so the AKM movement is visible), plus randomisation inference on exposure
+and the recentred-instrument inference of \citet{borusyakhull2022}.
+\textbf{Checks:} effective number of clusters under AKM (weak-cluster warning); thin
+dose cells.
+\begin{ref2}
+\R{``Your SE are too small.''} That is exactly the \citet{adao2019} point --- AKM is
+primary, clustered is the naive comparison.
+\end{ref2}
+
+% =============================================================================
+\section{Part VI --- Robustness program and the defensibility ladder}
+\label{part:rob}
+% =============================================================================
+The strength of the design is \emph{triple predetermination}: predetermined shares
+$\times$ external elasticities $\times$ frozen (or pre-shock) map. Each robustness kills
+a specific attack:
+\begin{center}\small
+\begin{tabular}{@{}p{6.3cm}p{6.6cm}@{}}
+\toprule
+\textbf{Robustness} & \textbf{Attack neutralised} \\
+\midrule
+(ii) pre-shock multilayer, high-$\omega$ & ``your frozen map is stale/arbitrary'' \\
+leave-one-out partition & ``the map is contaminated by the firm's own response'' \\
+year-specific partition (bracketing) & ``why freeze rather than evolve?'' \\
+BiCM null & ``blocks are degree artefacts'' \\
+dCDH-continuous / \citet{callawaygoodmanbacon2024} & ``TWFE biased under heterogeneity'' \\
+diversity$+$ubiquity controls & Nomaler--Verspagen confound \\
+base-year-tariff IV \citep{amiti2007} & ``Teti tariffs are endogenous'' \\
+leave-one-out / ex-China (BACI) RCA denominator & ``RCA crossings are macro reallocation'' \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% =============================================================================
+\section{Part VII --- Identification threats conceded at the outset}
+\label{part:threats}
+% =============================================================================
+Neither is network-specific; we address both head-on.
+\begin{ref2}
+\R{\textbf{Selection on exit} (first-round objection).} The shock induces exit
+\citep{crozet2021}; exited firms have no $\din/\dout$, so survivors are selected.
+Estimate $\Pr(\text{exit})$ explicitly; bound the survivor effect (Lee/IPW); report the
+headline as conservative.
+\R{\textbf{SUTVA / interference.}} A tariff on $p$ reallocates demand to substitutes
+held by other firms in the block. \citet{adao2019} absorbs the correlation in SE, not
+the causal interference; discuss it and, where feasible, use leave-out-block exposure.
+\end{ref2}
+
+% =============================================================================
+\section*{Build order (dependency graph)}
+\addcontentsline{toc}{section}{Build order}
+{\small
+\begin{verbatim}
+HS concordance + Customs + NBS
+  -> firm x HS6 x year panel -> RCA -> BiCM
+  -> bipartite -> BRIM partition (frozen on B0, or pre-shock multilayer)
+  -> d_in, d_out, Share_core  [Parts I-II]
+
+Teti dln(1+tau) + Fontagne eps_p + predetermined shares s_ip(B0)
+  -> continuous TariffShock_it  [Part III]
+
+(outcomes x dose) + RegDep + diversity/ubiquity
+  -> static + distributed-lag -> Adao+Borusyak-Hull inference
+  -> continuous-first robustness horse race  [Parts IV-VI]
+
+exit selection + SUTVA conceded and bounded  [Part VII]
+\end{verbatim}}
+A bug upstream (wrong HS vintage; non-predetermined shares; post-shock partition)
+invalidates every downstream estimate.
+
+\bibliographystyle{plainnat}
+\bibliography{../Bibliography_base}
+\end{document}
