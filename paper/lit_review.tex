@@ -497,44 +497,154 @@ sample-split robustness exercise.
 \label{subsec:lit_id}
 % ---------------------------------------------------------------------------
 
-Our identification strategy builds on two distinct methodological contributions.
-The first is the Bartik--Rotemberg shift-share design. Following \citet{amiti2007}
-and \citet{tomasi2022}, we construct the tariff exposure variable as
-$\text{TariffShock}_{it} = \sum_p s_{ip,\text{pre}} \cdot \Delta \ln(1+\tau_{pt})$,
-where $s_{ip,\text{pre}}$ are firm-product export shares in a pre-shock baseline
-window and $\tau_{pt}$ are bilateral applied tariffs from the Teti GTD. The
-predetermined shares satisfy the Bartik identifying assumption---that, conditional
-on firm and year fixed effects, baseline portfolio composition is unrelated to the
-future shock---and \citet{fontagne2022} provide the product-level elasticity weights
-$\varepsilon_k$ that determine the mapping between tariff changes and export disruption
-along each product dimension.
+Our identification strategy rests on a single organising principle: \emph{everything
+that could mechanically respond to the shock must be predetermined relative to it.}
+The estimand is the within-firm response of an export-capability portfolio to a
+trade-policy shock, and the credibility of that estimand depends on three objects
+being fixed before the shock---the exposure weights, the disruption elasticities, and
+the capability map against which the portfolio is read. We discuss each, and then
+state precisely which of three admissible network constructions we adopt and why.
 
-The second methodological strand addresses the contamination of two-way fixed effects
-(TWFE) estimators under heterogeneous and time-varying treatment effects. \citet{sunabraham2021}
-show that the standard TWFE estimator conflates treatment effects across cohorts with
-different timing of exposure, potentially generating sign reversals when early-treated
-cohorts experience effect reversal relative to late-treated cohorts---a realistic
-concern in a tariff-shock setting where the policy escalated across waves. The
-Interaction Weighted (IW) estimator of \citet{sunabraham2021} replaces the TWFE
-with a saturated cohort$\times$lag specification, weights cohort-specific ATTs by
-cohort size, and produces estimates that are guaranteed to be convex combinations of
-heterogeneous true effects. Our event-study specifications follow this design, and
-we verify the absence of pre-trends using the IW pre-trend test rather than the
-contaminated TWFE leads. Inference accounts for the correlation structure induced
-by the shift-share design following the cross-sectional heteroskedasticity-robust
-standard errors of \citet{adao2019}.
+\paragraph{A continuous, time-varying treatment.}
+Following the input-tariff shift-share of \citet{amiti2007}, \citet{topalova2011}, and
+\citet{tomasi2022}, we construct the tariff exposure variable as
+\[
+  \text{TariffShock}_{it}
+  = \sum_p s_{ip,\text{pre}}\cdot \varepsilon_p \cdot \Delta\ln(1+\tau_{pt}),
+\]
+where $s_{ip,\text{pre}}$ are firm--product export shares in a strictly pre-shock
+baseline window, $\Delta\ln(1+\tau_{pt})$ are changes in bilateral applied tariffs
+from the Teti GTD, and $\varepsilon_p$ are the product-level trade elasticities of
+\citet{fontagne2022}. We treat $\text{TariffShock}_{it}$ as a \emph{continuous,
+time-varying, non-absorbing} dose rather than a binary staggered treatment: the dose
+grows and recedes as tariffs move, and discretising it into a treated/control
+indicator would discard precisely the cross-firm variation in exposure intensity that
+identifies the dose--response. This choice is deliberate and consequential, as we make
+clear below. The elasticities $\varepsilon_p$ are estimated by \citet{fontagne2022} on
+the universe of 152 importers and 189 exporters---they are a property of the
+\emph{product}, external to our firm sample, and hence cannot be a function of the
+behaviour we study; products with a non-significant estimate inherit their HS-section
+mean. The predetermined shares satisfy the Bartik exogeneity condition, which we defend
+on \emph{both} of its routes: from the shares, following \citet{goldsmithpinkham2020},
+and from the shocks, following \citet{borusyakhull2022}, reporting Rotemberg-weight
+diagnostics and a recentred-instrument specification.
 
+\paragraph{Dynamics and inference for a continuous dose.}
+Because the treatment is continuous and non-absorbing, the cohort$\times$relative-time
+machinery of \citet{sunabraham2021} is not the natural primary specification---its
+cohorts are defined by the timing of a binary switch. We therefore estimate the
+dynamics through a distributed-lag event study, $Y_{it}=\sum_k \beta_k\,
+\text{TariffShock}_{i,t-k}+\alpha_i+\delta_t+\varepsilon_{it}$, in which the lead
+coefficients ($k<0$) constitute the parallel-trends test and the lag coefficients
+($k>0$) trace the persistence (hysteresis) prediction. Inference follows the
+shift-share-robust standard errors of \citet{adao2019}, which are native to continuous
+exposure designs and which we report as primary against firm- and sector-clustered
+alternatives. As robustness we re-estimate the dynamics with the continuous,
+non-absorbing estimator of \citet{dechaisemartin2020}, the continuous-treatment
+difference-in-differences framework of \citet{callawaygoodmanbacon2024}, and---after
+discretising exposure into terciles---the heterogeneity-robust estimators of
+\citet{sunabraham2021}, \citet{callawaysantanna2021}, and \citet{borusyak2024}. We
+flag the assumption that the continuous design carries a \emph{stronger} parallel-trends
+requirement than the binary case---\citet{callawaygoodmanbacon2024} show that
+identifying the dose--response slope requires the absence of selection into dose level,
+which we probe but cannot fully test.
+
+\paragraph{The capability map: three admissible constructions, and the one we adopt.}
+The outcomes $d_{\rm in}$, $d_{\rm out}$, and $\text{Share\_core}$ are read off a
+block partition of the firm--product export network \citep[the export, not production,
+basis of][]{destefano2025}, obtained by bipartite modularity maximisation
+\citep{barber2007} on an RCA-binarised incidence matrix validated against the Bipartite
+Configuration Model \citep{squartini2011,saracco2015,cimini2022}. The non-trivial
+question is \emph{when} the partition is estimated, because the map is itself the
+measuring instrument for the outcome, and a map estimated on post-shock data would
+co-move with the treatment. Three constructions are admissible:
+\begin{enumerate}
+  \renewcommand{\labelenumi}{(\roman{enumi})}
+  \item \textbf{Frozen baseline partition.} The partition $b(p)$ and each firm's core
+        block $c(f)$ are estimated once, on the pre-shock baseline window, and held
+        fixed; only the firm's RCA incidence $M_{fpt}$ varies over time. The
+        panel variation in $d_{\rm in}/d_{\rm out}$ is then unambiguously the firm
+        relocating against a frozen, predetermined grid.
+  \item \textbf{Predetermined evolving partition.} The map is allowed to evolve, but
+        estimated only on \emph{pre-shock} slices through the temporal multilayer
+        modularity of \citet{mucha2010}---with inter-slice coupling and resolution
+        chosen by partition stability \citep{bazzi2016}---and then extrapolated forward.
+        This nests (i) as the strong-coupling limit and captures any pre-existing drift
+        in the capability space, at the cost of measurement error that grows with the
+        post-shock horizon.
+  \item \textbf{Contemporaneous multilayer.} The map evolves using all years including
+        post-shock. Under our continuous treatment this construction is \emph{not}
+        causally identified: with no never-treated firms, there is no
+        treatment-independent control group from which to anchor the map, so the
+        partition---and hence the $(d_{\rm in}+d_{\rm out})$ denominator---remains a
+        function of the dose. We therefore use it only descriptively, to document how
+        the capability space reorganises, and never as the causal outcome.
+\end{enumerate}
+\textbf{We adopt (i) as the headline specification}, precisely because it has the
+smallest researcher degrees of freedom and the cleanest exogeneity argument: the map
+literally precedes the shock and cannot respond to it. Its one weakness---that a frozen
+map grows stale---generates classical measurement error and therefore attenuation
+\emph{against} our hypotheses, an honest bias rather than a confounding one. We
+neutralise even that concern by reporting (ii) as robustness, which lets the map evolve
+on pre-shock information and leaves the estimates intact, and by re-estimating (i) with
+a leave-one-out partition that excludes each focal firm from the map that classifies
+it, breaking the reflexive channel. Two construction rules are stated explicitly and
+checked: products with no baseline block are assigned by product-space proximity (or
+dropped, with the affected export share reported), and firms born after the baseline
+are handled within the exit-selection analysis rather than assigned a post-baseline
+core. We compute RCA with the standard contemporaneous, \emph{within-China} Balassa
+denominator: because the capability blocks are themselves built from the Chinese
+firm--product network, a China-relative benchmark---specialisation relative to the
+Chinese export economy---is the internally consistent and economically natural object,
+and we retain it as the headline measure. The denominator carries a second-order
+\emph{inference} concern rather than an economic one: under a sector-wide shock the
+aggregate Chinese export of a treated product falls for all exposed firms, mechanically
+inflating the within-sample benchmark and potentially moving threshold crossings for
+reasons unrelated to the firm's own portfolio choice. We treat this as robustness, not
+as a change of measure. We re-estimate with a leave-one-out within-China denominator,
+which preserves the China-relative interpretation while removing the firm's reflexive
+contribution, and, as a more aggressive check, against a rest-of-world (ex-China) BACI
+benchmark, which trades the China referent for full exogeneity to the Chinese firms'
+treated response.
+
+\paragraph{An elegant alternative under a modified treatment.}
+We note one design under which the \emph{contemporaneous} evolving map (iii) would
+become causally admissible: were we to trade the continuous dose for a binary,
+staggered treatment, the not-yet-treated firms would furnish a treatment-independent
+control group from which the time-evolving partition could be estimated at each date
+\citep[in the spirit of the control-group construction of][]{callawaysantanna2021},
+yielding a map that is simultaneously evolving and exogenous. This is a genuine
+optimisation of elegance over the frozen design, but it is purchased by discarding the
+exposure-intensity information that motivates our continuous specification, and it
+relies on a credible never-/not-yet-treated set under the diffuse Teti tariff
+schedule. We therefore retain the continuous treatment with the frozen map as our
+primary design, and present the binary control-group-map construction as a deliberate
+robustness fork rather than the main specification.
+
+\paragraph{Two concessions we make at the outset.}
+Neither threat is specific to the network construction, and we address both head-on
+rather than conceal them. First, the shock induces firm exit \citep{crozet2021}; since
+an exited firm has no $d_{\rm in}/d_{\rm out}$, survivors are selected, and we therefore
+estimate the effect on the probability of exit, bound the survivor effect, and read our
+portfolio estimates as conservative. Second, a tariff on one product reallocates demand
+to substitutes held by other firms in the same block, so the stable-unit-treatment
+assumption is strained; the \citet{adao2019} correction absorbs the resulting
+cross-firm correlation in the standard errors but not the causal interference, which we
+discuss and, where feasible, probe with leave-out-block exposure.
+
+\paragraph{Firm-level data and the ownership moderator.}
 The panel of Chinese exporting firms comes from the NBS Annual Survey of Industrial
 Enterprises, used in the same form by \citet{guariglia2011}. That paper establishes
 three features of the NBS data that shape our design: SOEs operate under soft budget
 constraints and face negligible financial frictions, private domestic firms are
 severely financially constrained (near-unit-root self-financing), and coastal firms
-without foreign capital face the binding constraint. The ownership heterogeneity
-motivates our SOE--private split in the heterogeneous-treatment analysis: privately
-owned firms facing financial constraints respond more sharply to export market closures
-because they cannot subsidise loss-making product lines from retained earnings, making
-the $d_{\rm out}$ contraction more immediate and the $d_{\rm in}$ consolidation more
-forced.
+without foreign capital face the binding constraint. Because firms switch ownership
+status over the panel, we assign type by a consistent across-years rule following
+\citet{guariglia2011}. The ownership heterogeneity motivates our SOE--private split:
+privately owned firms facing financial constraints respond more sharply to export market
+closures because they cannot subsidise loss-making product lines from retained earnings,
+making the $d_{\rm out}$ contraction more immediate and the $d_{\rm in}$ consolidation
+more forced.
 
 % ---------------------------------------------------------------------------
 \subsection{Our Contribution}
@@ -565,10 +675,14 @@ categories display systematically larger capability consolidation effects than f
 in non-dependent categories, and this heterogeneity is not explained by tariff
 magnitudes alone, consistent with the dual treatment of higher tariffs and active
 EU reshoring policy targeting the same product space. Finally, to the identification
-literature, we demonstrate that the IW event-study design of \citet{sunabraham2021}
-is tractable at the scale of full-universe firm--product panels and that the
-\citet{adao2019} inference correction materially affects standard errors in
-heterogeneous-exposure shift-share settings with product-level clustering.
+literature, we demonstrate that a continuous-dose distributed-lag event study---with the
+heterogeneity-robust continuous-treatment estimators of \citet{dechaisemartin2020} and
+\citet{callawaygoodmanbacon2024} as robustness---is tractable at the scale of
+full-universe firm--product panels, that the \citet{adao2019} shift-share-robust
+correction materially affects standard errors in heterogeneous-exposure settings with
+product-level clustering, and that reading a network-derived outcome against a
+\emph{predetermined} (frozen, or pre-shock-estimated) capability partition is what keeps
+the estimand exogenous to the shock.
 
 % =============================================================================
 \section{Expected Dynamics: What the Literature Predicts We Should Observe}
@@ -791,10 +905,12 @@ evidence at the firm level. The $\text{Share\_core}$ outcome under a predetermin
 delivers a directly signed estimate of which way firms move when their core is
 threatened.
 
-\item \textbf{Scalability of modern event-study estimators.} We demonstrate that the
-IW estimator of \citet{sunabraham2021} with \citet{adao2019} shift-share inference is
-tractable on a full-universe firm--product panel---a methodological contribution in its
-own right for the heterogeneous-exposure shift-share literature.
+\item \textbf{Scalability of continuous-treatment event-study estimators.} We demonstrate
+that a continuous-dose distributed-lag design with \citet{adao2019} shift-share inference---and
+the heterogeneity-robust continuous-treatment estimators of \citet{dechaisemartin2020} and
+\citet{callawaygoodmanbacon2024}---is tractable on a full-universe firm--product panel, a
+methodological contribution in its own right for the heterogeneous-exposure shift-share
+literature.
 \end{enumerate}
 
 % ---------------------------------------------------------------------------
@@ -814,14 +930,17 @@ to a firm--product--destination tensor and asks whether capability blocks reorga
 markets. This is the volatility-minimising hypothesis of $\Phi$-diversity made
 firm-specific.
 
-\paragraph{(b) Temporal-coupled partitions as an object of study.}
-Our design freezes the baseline block to keep treatment predetermined. But the
-multilayer community-detection machinery (\citealp{blondel2008}; \citealp{fortunato2016})
-permits a temporally coupled partition in which block identities evolve. A dedicated
-paper could treat \emph{block reconfiguration itself}---birth, death, and merger of
-capability clusters---as the outcome, asking how trade shocks reshape the modular
-geometry of an entire industry rather than the position of a single firm within a fixed
-geometry.
+\paragraph{(b) Contemporaneous temporal-coupled partitions as a causal object.}
+Our headline design freezes the baseline block, and our robustness lets it evolve on
+\emph{pre-shock} information through the temporal multilayer machinery of \citet{mucha2010}
+(with coupling and resolution chosen as in \citealp{bazzi2016}). What we deliberately leave
+open is the \emph{contemporaneous} version: treating \emph{block reconfiguration itself}---the
+birth, death, and merger of capability clusters measured with post-shock data---as the causal
+outcome. Under our continuous treatment this is not identified, because there is no
+never-treated control group from which to anchor an evolving map; a dedicated study could
+recover it under a binary, staggered design by estimating the partition from not-yet-treated
+firms, asking how trade shocks reshape the modular geometry of an entire industry rather than
+the position of a single firm within a fixed geometry.
 
 \paragraph{(c) The antidumping and safeguard stage.}
 The Teti GTD \citep{teti2024} captures statutory MFN and preferential tariffs but
