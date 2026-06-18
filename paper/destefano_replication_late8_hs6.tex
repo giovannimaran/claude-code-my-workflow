@@ -202,6 +202,17 @@ $5\to10\to24\to70$ as $\gamma=1\to2\to4\to8$). The comparison with their seven i
 the same $\gamma=1$ and the same (BRIM) algorithm, a point worth remembering before reading anything into ``5
 vs 7''.
 
+\paragraph{What $\gamma$ is.} The resolution $\gamma$ weights the null term in the modularity. Each pair of
+nodes placed in the same block is ``charged'' $\gamma$ times its expected random-baseline connection
+$k_f d_p/m$, against a reward of $+1$ per observed link; a block survives only when its internal reward beats
+that charge. So $\gamma=1$ is standard modularity --- the charge equals the configuration-model expectation,
+De Stefano's choice --- while $\gamma>1$ raises the charge and yields more, smaller blocks, and $\gamma<1$
+yields fewer, larger ones. In the CPM-bipartite implementation we use, $\gamma$ is equivalently a
+\emph{density threshold}: a community is kept only if its internal link density exceeds $\gamma$. The Leiden
+routine is only the optimiser; $\gamma$ is a property of the objective, not of the algorithm. The Appendix
+details the three algorithms and their null models. We keep $\gamma=1$ throughout and report $\gamma=2$ as a
+robustness check (\S\ref{sec:gamma}).
+
 %=================================================================
 \subsection{Block anatomy and the De Stefano comparison}
 
@@ -431,7 +442,10 @@ reason is that RCA is scale-invariant: a high-value firm is not just ``the same 
 more core-concentrated product mix. Scaling in export value comes from deepening in the core --- specialisation
 --- not from scattering into unrelated products. Geographic breadth and export volume are therefore different,
 opposing margins: the extensive margin of markets pushes the portfolio out of block, the intensive margin of
-value pulls it in.
+value pulls it in. This mechanism is, however, the \emph{least robust} of our findings: it is clean and
+monotone at $\gamma=1$ but partially reverses at the highest flow quintile under the finer $\gamma=2$ partition
+(\S\ref{sec:gamma}), so we read it as a $\gamma=1$ pattern rather than a law. The destination result above does
+not have this fragility --- it is monotone at both resolutions.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.97\textwidth]{ds_fig7_flow_mechanism.pdf}
@@ -586,12 +600,27 @@ menus.}
 out-of-block share rises across the board (pure in-block $54.5\%\to43.2\%$) and is \emph{not} comparable across
 $\gamma$ --- read $\dout$ levels within a resolution, never across. But every substantive conclusion holds at
 $\gamma=2$: the modular structure is real and in fact stronger ($\QB$ higher); the blocks are still not a
-relabelling of HS sectors (ARI/NMI even higher); and out-of-block exploration still tracks destination breadth,
-not export volume (correlation with reach $0.16$ against $0.06$ with value). The one result that softens is the
-flow mechanism --- at $\gamma=2$ in-block diversification no longer grows cleanly faster than out-of-block in
-proportion, though the share still falls with volume. The reading is reassuring: $\gamma=1$ is a sensible
-reporting default, giving five economically interpretable blocks without over-splitting coherent sectors, and
-the findings do not depend on that choice.
+relabelling of HS sectors (ARI/NMI rise only marginally, to $0.32/0.48$, and stay far below $1$ --- the finer
+blocks are slightly more sector-like, as one would expect, but nowhere near a relabelling); and out-of-block
+exploration still tracks destination breadth, not export volume (correlation with reach $0.16$ against $0.06$
+with value). The one result that does \emph{not}
+survive cleanly is the flow mechanism. At $\gamma=1$ the out-of-block share falls monotonically with export
+volume ($12.7\%\to9.3\%$, destination reach held fixed); at $\gamma=2$ it falls only through the fourth flow
+quintile and then \emph{rebounds} at the top quintile ($15.6\%\to16.9\%$), because there out-of-block
+diversification grows faster than in-block ($\times1.84$ vs $\times1.79$). Fig.~\ref{fig:g2mech} shows the
+reversal. We therefore treat ``volume deepens the core'' as a $\gamma=1$ pattern, not a robust law --- unlike
+the destination result, which is monotone at both resolutions. Overall the reading is still reassuring:
+$\gamma=1$ is a sensible reporting default, giving five economically interpretable blocks without over-splitting
+coherent sectors, and the substantive findings do not depend on that choice.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.97\textwidth]{ds_g2_flow_mechanism.pdf}
+\caption{$\gamma=2$ flow mechanism (destination reach held fixed), to be read against the $\gamma=1$ version
+(Fig.~\ref{fig:mech}). \textbf{Right:} the out-of-block share falls with flow only up to F4 and then
+\emph{rebounds} at the top flow quintile F5 --- the one place the ``volume deepens the core'' reading breaks
+under a finer partition.}
+\label{fig:g2mech}
+\end{figure}
 
 %=================================================================
 \section{Keep attention for the dynamic landscape}
@@ -616,6 +645,44 @@ part:
   \item \textbf{Carry the sample caveats.} Balanced core only ($19\%$ of firms, $62\%$ of value); block
         \emph{count} is resolution/algorithm-dependent, so fix the partition choice (BRIM, $\gamma=1$).
 \end{itemize}
+
+%=================================================================
+%=================================================================
+\section*{Appendix: community-detection algorithms and the resolution $\gamma$}
+\label{app:algos}
+\small
+
+All three algorithms partition the \emph{same} bipartite firm--product graph, but they optimise different
+objectives, and the difference is entirely in the \emph{null model} --- the random baseline against which
+observed within-block links are scored.
+
+\paragraph{Modularity and the null.} Modularity rewards a partition for the links that fall inside blocks
+\emph{beyond} what a degree-preserving random graph would put there. For a one-mode graph (Newman, 2006),
+$Q=\frac{1}{2m}\sum_{ij}\big(A_{ij}-\gamma\,\tfrac{k_ik_j}{2m}\big)\delta(c_i,c_j)$, where $k_ik_j/2m$ is the
+configuration-model expectation and $\gamma$ the resolution.
+
+\paragraph{Louvain (Blondel et al., 2008).} A fast greedy optimiser of the one-mode $Q$. Run on a bipartite
+graph it still uses the \emph{one-mode} null, which expects firm--firm and product--product links that cannot
+exist; the mis-specified baseline inflates apparent within-block density and Louvain tends to
+\emph{over-segment} (here: 13 blocks).
+
+\paragraph{Leiden (Traag et al., 2019).} An improved optimiser that repairs Louvain's badly-connected-community
+defect and guarantees well-connected blocks. We run it on the same one-mode RB-modularity: a better optimiser,
+but the same null mis-specified for a two-mode graph (here: 9 blocks).
+
+\paragraph{BRIM (Barber, 2007).} Uses the \emph{correct bipartite null}. The expected link between firm $f$ and
+product $p$ is $k_f d_p/m$ --- it preserves the firm and product degree sequences separately and places expected
+links only across the two node types, never within one. The bipartite modularity is
+$\QB=\frac{1}{m}\sum_{fp}\big(B_{fp}-\gamma\,\tfrac{k_f d_p}{m}\big)\delta(g_f,g_p)$, and blocks are co-clusters
+containing both firms and products. This is De Stefano's choice and ours (here: 5 blocks, $\QB=0.505$). We
+implement it through \texttt{leidenalg}'s CPM-bipartite recipe, scaled so that $\gamma=1$ reproduces standard
+Barber modularity.
+
+\paragraph{The resolution $\gamma$.} $\gamma$ multiplies the null term --- the ``charge'' for grouping two nodes
+--- so $\gamma=1$ is standard modularity, $\gamma>1$ gives more and smaller blocks, $\gamma<1$ fewer and larger.
+In the CPM form $\gamma$ is a density threshold (keep a community only if its internal density exceeds
+$\gamma$), which is why CPM avoids the modularity resolution limit. Leiden is only the optimiser; $\gamma$
+belongs to the objective. We keep $\gamma=1$ as the baseline and report $\gamma=2$ in \S\ref{sec:gamma}.
 
 %=================================================================
 \section*{References}
