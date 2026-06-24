@@ -39,8 +39,8 @@
           innerleftmargin=10pt,innerrightmargin=10pt]{keybox}
 
 % ---- title block ------------------------------------------------------------
-\title{\vspace{-1.0cm}\textbf{\large Retrenchment or Reinvention?}\\[4pt]
-\Large Firm-Level Capability Reconfiguration under Trade Shocks}
+\title{\vspace{-1.0cm}\textbf{\large Deepen or Diversify?}\\[4pt]
+\Large Estimating Firm Capability Reconfiguration under Trade Shocks}
 
 \author{%
 \textbf{Giovanni Maran}\\[3pt]
@@ -63,9 +63,9 @@ network}, split diversification into an \emph{in-block} margin $\din$ (deepening
 core) and an \emph{out-of-block} margin $\dout$ (exploring beyond it), and ask how a
 predetermined, continuous tariff shock moves the two. The static capability map is
 already built on Chinese customs microdata (\S\ref{sec:china}); the causal panel is the
-next step (\S\ref{sec:panel}). I would value your view on the mechanism, on the
-identification, and on whether a tractable model can rationalise the sign
-(\S\ref{sec:questions}).
+next step (\S\ref{sec:panel}). Sections~\ref{sec:question}--\ref{sec:panel} lay out the
+design and its problems; the open questions for discussion are collected in
+\S\ref{sec:questions}.
 \end{keybox}
 
 \vspace{2pt}
@@ -294,15 +294,15 @@ outward; volume pulls it inward.}
 \end{figure}
 
 % =============================================================================
-\section{From description to causation: the problem, and where I need your intuition}
+\section{From description to causation: the design and its problems}
 \label{sec:panel}
 % =============================================================================
 
 The static layer is descriptive. The causal question (does an adverse trade shock push
 the firm toward $\din$ or $\dout$?) needs a firm-by-year panel of the outcomes and a
 credibly exogenous shock. Two of the three moving parts I think are tractable; the third
-is genuinely open, and it is where I would most value your intuition. I lay out the
-problem and my candidate fixes, and then ask what \emph{you} would do.
+is genuinely open. I lay out the problem and my candidate fixes here; the open questions
+they raise are collected in \S\ref{sec:questions}.
 
 \paragraph{The shock --- I think this part is in hand.} I plan a continuous Bartik tariff
 dose
@@ -348,13 +348,12 @@ routes, each with a cost:
 (estimated only on pre-shock slices) as robustness, and --- the option I am most drawn to
 but least sure of --- a binary, staggered design whose \emph{not-yet-treated} firms
 could anchor a partition that evolves \emph{contemporaneously yet stays exogenous}, in the
-spirit of a clean control group. \textbf{This single choice is the thing I would most like
-your view on:} is the cleaner estimand worth a held-fixed (and therefore stale) map, or is
-there a smarter way to let the capability geometry move \emph{with} the data without
-letting it move \emph{with the treatment}? Put concretely, it is a question about the
-\emph{detection algorithm} itself: can BRIM (or any community-detection method) be made to
-deliver a partition that updates with the data yet stays, by construction, blind to the
-shock? Any intuition you have on that --- even that I am framing it wrongly --- would help.
+spirit of a clean control group. The open choice is whether the cleaner estimand is worth a
+held-fixed (and therefore stale) map, or whether the capability geometry can be made to move
+\emph{with} the data without moving \emph{with the treatment}. Concretely it is a question
+about the \emph{detection algorithm} itself: whether BRIM (or any community-detection
+method) can deliver a partition that updates with the data yet stays, by construction, blind
+to the shock. I take this back up in \S\ref{sec:questions}.
 
 \paragraph{What the preliminary data already dictate (whatever I decide above).} The static
 layer is not just motivation; it pins down choices. (i)~$\din$ is the cleanest outcome;
@@ -378,13 +377,6 @@ binding constraint on the project.
 
 \subsection*{Soft spots I am already worried about}
 \begin{enumerate}[leftmargin=1.5em]
-  \item \textbf{The within-China RCA denominator under an aggregate shock.} Blocks are
-        built from the Chinese firm--product network, so a China-relative Balassa is the
-        internally consistent benchmark --- but a sector-wide tariff shock moves the
-        aggregate Chinese export of a treated product for \emph{all} exposed firms,
-        mechanically shifting threshold crossings. I treat this as an inference issue
-        (leave-one-out and ex-China BACI denominators as robustness), but it is really a
-        \emph{general-equilibrium} contamination of my own measure.
   \item \textbf{Exit selection.} The shock induces exit (Crozet et al.\ 2021); exited
         firms have no $\din/\dout$, so survivors are selected. I plan an exit equation
         plus Lee/IPW bounds and read the headline as conservative --- but the balanced-%
@@ -419,14 +411,12 @@ binding constraint on the project.
         \S\ref{sec:panel}). Beyond the two routes I sketched, is there a third I am
         missing --- for instance a \emph{partition-free} outcome (a continuous relatedness
         or coherence score of the basket) that would sidestep the timing problem
-        altogether, at the cost of losing the crisp in/out split? Which would you reach
-        for?
+        altogether, at the cost of losing the crisp in/out split? And on the method itself:
+        can a community-detection partition be made to evolve with the data yet stay blind
+        to the shock, or is that the wrong way to frame it? Which would you reach for?
   \item \textbf{Parallel trends for a continuous dose.} Beyond plotting lead
         coefficients, what is the most convincing way to defend ``no selection into dose
         level'' when the dose is a smooth shift-share and there is no clean control group?
-  \item \textbf{The denominator problem.} Is the within-China RCA benchmark defensible
-        under an aggregate shock, or should I move to an ex-China (rest-of-world) benchmark
-        as the headline and pay the cost of a less internally consistent block definition?
   \item Given the zero-inflation, is there a better-powered \emph{single} outcome (a
         product-level retention hazard, in the spirit of Fontagn\'e et al.\ 2018) than
         the firm-level $\sharecore$?
@@ -452,12 +442,11 @@ matters most --- so these are deliberately open.
         single state variable (capability stock, or distance-to-core)? That is the form in
         which March's (1991) verbal tension would become testable, but I do not yet see the
         minimal model that gives it.
-  \item Does any of this \emph{need} general equilibrium? The within-China RCA denominator
-        is itself a GE object, so the aggregate-shock ``contamination'' of my measure
-        (soft spot 1) might be better treated as a structural feature inside a quantitative
-        trade model --- which would also let me speak to the \emph{welfare} of retrenchment,
-        not just its sign. Is that worth the modelling cost, or a distraction from a clean
-        reduced-form paper?
+  \item Does any of this \emph{need} general equilibrium? A sector-wide tariff shock is an
+        aggregate phenomenon, so its firm-level effects might be better captured inside a
+        quantitative trade model --- which would also let me speak to the \emph{welfare} of
+        retrenchment, not just its sign. Is that worth the modelling cost, or a distraction
+        from a clean reduced-form paper?
   \item If you did build it, which empirical moment would you discipline it on first --- the
         dose--response slope, the $\din/\dout$ heterogeneity by strategic dependence, or the
         destination-reach gradient?
@@ -467,8 +456,8 @@ matters most --- so these are deliberately open.
 \begin{keybox}
 \noindent\textbf{What I would most like to leave the meeting with.}\ A judgement on the
 binding constraint: is this project limited by \emph{identification} (the map-timing
-choice and the continuous dose), by \emph{measurement} (the RCA denominator and
-intermediaries), or
+choice and the continuous dose), by \emph{measurement} (intermediaries and the
+balanced-sample selection), or
 by the absence of a \emph{theoretical} object that makes the $\din/\dout$ split a
 structural quantity? My current bet is that the empirics can carry a first paper on their
 own, with the model as a second-stage companion --- but I would like to pressure-test
